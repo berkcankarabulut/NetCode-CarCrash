@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -6,9 +5,9 @@ using UnityEngine;
 
 namespace Game.Player
 {
-    public class PlayerVehicleVisual : MonoBehaviour
+    public class PlayerVehicleVisual : NetworkBehaviour
     {
-        [SerializeField] private Transform _jeepVisualTransform; 
+        [SerializeField] private Transform _jeepVisualTransform;
         [SerializeField] private Collider _playerCollider;
         [SerializeField] private Transform _wheelFrontLeft, _wheelFrontRight, _wheelBackLeft, _wheelBackRight;
         [SerializeField] private float _wheelsSpinSpeed, _wheelYWhenSpringMin, _wheelYWhenSpringMax;
@@ -47,18 +46,19 @@ namespace Game.Player
         }
 
         private void Spawn()
-        {  
+        {
             _playerVehicleController = GetComponent<PlayerVehicleController>();
 
             _wheelFrontLeftRoll = _wheelFrontLeft.localRotation;
             _wheelFrontRightRoll = _wheelFrontRight.localRotation;
 
             _springsRestLength = _playerVehicleController.Settings.SpringRestLength;
-            _steerAngle = _playerVehicleController.Settings.SteerAngle; 
+            _steerAngle = _playerVehicleController.Settings.SteerAngle;
         }
 
         private void Update()
-        { 
+        {
+            if (!IsOwner) return;
             UpdateVisualStates();
             RotateWheels();
             SetSuspension();
@@ -175,6 +175,6 @@ namespace Game.Player
         public void SetVehicleVisualActive(float delay)
         {
             StartCoroutine(SetVehicleVisualActiveCoroutine(delay));
-        } 
+        }
     }
 }

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Game.Player.Data;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Game.Player
 {
-    public class PlayerVehicleController : MonoBehaviour
+    public class PlayerVehicleController : NetworkBehaviour
     {
         private class SpringData
         {
@@ -53,19 +55,24 @@ namespace Game.Player
             {
                 _springDatas.Add(wheel, new());
             }
+        }
 
+        public override void OnNetworkSpawn()
+        { 
             _vehicleRigidbody.isKinematic = true;
             SetOwnerRigidbodyKinematicAsync();
         }
 
         private void Update()
         {
+            if (!IsOwner) return; 
             SetSteerInput(Input.GetAxis("Horizontal"));
             SetAccelerateInput(Input.GetAxis("Vertical"));
         }
 
         private void FixedUpdate()
         {
+            if (!IsOwner) return; 
             UpdateSuspension();
             UpdateSteering();
             UpdateAccelerate();
@@ -75,6 +82,8 @@ namespace Game.Player
 
         private async void SetOwnerRigidbodyKinematicAsync()
         {
+            if (!IsOwner) return;
+            await UniTask.DelayFrame(1);
             _vehicleRigidbody.isKinematic = false;
         }
 
