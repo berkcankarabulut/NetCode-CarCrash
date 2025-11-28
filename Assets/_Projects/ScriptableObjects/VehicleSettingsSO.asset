@@ -12,8 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6853d5359da14d95864e93f703330757, type: 3}
   m_Name: VehicleSettingsSO
   m_EditorClassIdentifier: 
+  _width: 0
+  _height: 0
+  _length: 0
   _wheelsPaddingX: 0.06
   _wheelsPaddingZ: 0.12
-  _springRestLenght: 0.8
-  _springStrenght: 1200
+  _chassiMass: 1
+  _tireMass: 1
+  _springRestLength: 0.8
+  _springStrength: 1200
   _springDamper: 75
+  _acceleratePower: 300
+  _brakesPower: 1.5
+  _maxSpeed: 22
+  _maxReverseSpeed: 12
+  _steerAngle: 45
+  _frontWheelsGripFactor: 0.5
+  _rearWheelsGripFactor: 0.5
+  _airResistance: 5
