@@ -1,3 +1,4 @@
+using _Projects.Scripts.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,12 +10,14 @@ namespace _Project.Collect
         private static readonly int IsRespawned = Animator.StringToHash("IsRespawned");
         
         [Header("Settings")]
+        [SerializeField] private MysteryBoxSkillSO[] _skills;
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _collider;
         [SerializeField] private float _respawnTime = 5;
 
         public void Collect()
         {
+            MysteryBoxSkillSO skill = GetRandomSkill();
             CollectRpc();
         }
 
@@ -35,6 +38,12 @@ namespace _Project.Collect
         {
             _animator.SetTrigger(IsRespawned);
             _collider.enabled = true;
+        }
+
+        private MysteryBoxSkillSO GetRandomSkill()
+        {
+            int index = Random.Range(0, _skills.Length);
+            return _skills[index];
         }
     }
 }

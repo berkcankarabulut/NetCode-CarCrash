@@ -68,8 +68,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1498926393
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 343390485
+  InScenePlacedSourceGlobalObjectIdHash: 1498926393
   DeferredDespawnTick: 0
   Ownership: 8
   AlwaysReplicateAsRoot: 0
@@ -96,6 +96,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _animator: {fileID: 6431581394289868566}
   _collider: {fileID: 7466322676606809226}
+  _respawnTime: 5
 --- !u!1001 &3322200030556143659
 PrefabInstance:
   m_ObjectHideFlags: 0

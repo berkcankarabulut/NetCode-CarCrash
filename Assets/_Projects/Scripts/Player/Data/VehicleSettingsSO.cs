@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Player.Data
 {
-    [CreateAssetMenu(menuName = "SOs/VehicleSettingsSO", fileName = "VehicleSettingsSO")]
+    [CreateAssetMenu(menuName = "Scriptable Objects/VehicleSettingsSO", fileName = "VehicleSettingsSO")]
     public class VehicleSettingsSO : ScriptableObject
     {
         [Header("Shape")] [SerializeField] private float _width;
