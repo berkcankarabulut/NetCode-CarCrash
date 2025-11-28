@@ -1,3 +1,4 @@
+using _Project.UI.SkillSystem;
 using _Projects.Scripts.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,8 +9,8 @@ namespace _Project.Collect
     {
         private static readonly int IsCollected = Animator.StringToHash("IsCollected");
         private static readonly int IsRespawned = Animator.StringToHash("IsRespawned");
-        
-        [Header("Settings")]
+
+        [Header("Settings")] 
         [SerializeField] private MysteryBoxSkillSO[] _skills;
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _collider;
@@ -18,12 +19,13 @@ namespace _Project.Collect
         public void Collect()
         {
             MysteryBoxSkillSO skill = GetRandomSkill();
+            SkillsUI.Instance.SetSkill(skill.SkillName, skill.Icon);
             CollectRpc();
         }
 
         [Rpc(SendTo.ClientsAndHost)]
         public void CollectRpc()
-        { 
+        {
             AnimateCollection();
             Invoke(nameof(Respawn), _respawnTime);
         }

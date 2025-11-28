@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 343390485
+  GlobalObjectIdHash: 1498926393
   InScenePlacedSourceGlobalObjectIdHash: 1498926393
   DeferredDespawnTick: 0
   Ownership: 8
@@ -94,6 +94,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _skills:
+  - {fileID: 11400000, guid: 9b7d1a93fbe8cc843ab3e137919b5bf8, type: 2}
+  - {fileID: 11400000, guid: df443199edc55d64b958e19b5bd3fb71, type: 2}
+  - {fileID: 11400000, guid: 48f3fdb3ad04c3b409227595f185af98, type: 2}
+  - {fileID: 11400000, guid: 9892e74f3b06ab843b70acaceefd27c3, type: 2}
+  - {fileID: 11400000, guid: 3e1f0e73e040c3149b053ed482ca7a17, type: 2}
   _animator: {fileID: 6431581394289868566}
   _collider: {fileID: 7466322676606809226}
   _respawnTime: 5
