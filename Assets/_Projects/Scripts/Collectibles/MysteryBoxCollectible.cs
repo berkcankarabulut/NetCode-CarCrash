@@ -1,5 +1,6 @@
 using _Project.UI.SkillSystem;
 using _Projects.Scripts.SkillSystem;
+using Game.Player;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -16,10 +17,11 @@ namespace _Project.Collect
         [SerializeField] private Collider _collider;
         [SerializeField] private float _respawnTime = 5;
 
-        public void Collect()
+        public void Collect(PlayerSkillController controller)
         {
             MysteryBoxSkillSO skill = GetRandomSkill();
             SkillsUI.Instance.SetSkill(skill.SkillName, skill.Icon);
+            controller.SetupSkill(skill);
             CollectRpc();
         }
 

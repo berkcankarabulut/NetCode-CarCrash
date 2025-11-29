@@ -2176,6 +2176,83 @@ MonoBehaviour:
   _skillName: {fileID: 800895855}
   _timerCounter: {fileID: 871389480}
   _timerCounterParentTransform: {fileID: 636275866}
+--- !u!1 &2132080983
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2132080986}
+  - component: {fileID: 2132080984}
+  - component: {fileID: 2132080985}
+  m_Layer: 0
+  m_Name: SkillManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2132080984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132080983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1265421322
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &2132080985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132080983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aab079b007deb544288bb54c7fa8b142, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _skills:
+  - {fileID: 11400000, guid: 9b7d1a93fbe8cc843ab3e137919b5bf8, type: 2}
+  - {fileID: 11400000, guid: df443199edc55d64b958e19b5bd3fb71, type: 2}
+  - {fileID: 11400000, guid: 48f3fdb3ad04c3b409227595f185af98, type: 2}
+  - {fileID: 11400000, guid: 9892e74f3b06ab843b70acaceefd27c3, type: 2}
+  - {fileID: 11400000, guid: 3e1f0e73e040c3149b053ed482ca7a17, type: 2}
+--- !u!4 &2132080986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132080983}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.072599, y: -3.8780808, z: 4.8044996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1624523505203042978
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2190,15 +2267,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8498613193997309178, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.37
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8498613193997309178, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9499779
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8498613193997309178, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.030453384
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8498613193997309178, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2253,3 +2330,4 @@ SceneRoots:
   - {fileID: 12080755}
   - {fileID: 256131408}
   - {fileID: 1624523505203042978}
+  - {fileID: 2132080986}

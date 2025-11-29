@@ -6,13 +6,22 @@ namespace Game.Player
 {
     public class PlayerInteractionController : NetworkBehaviour
     {
-        private void OnTriggerEnter(Collider other)
+        PlayerSkillController _playerSkillController;
+        public override void OnNetworkSpawn()
         {
-            Debug.Log(other.name);
+            base.OnNetworkSpawn();
+            if (!IsOwner) return;
+            _playerSkillController = GetComponent<PlayerSkillController>();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        { 
             if(!IsOwner) return;
+            if (_playerSkillController.HasSkillAlready) return; 
+            
             ICollectible collectible = other.gameObject.GetComponent<ICollectible>();
             if (collectible == null) return;
-            collectible.Collect();
+            collectible.Collect(_playerSkillController);
         }
     }
 }
