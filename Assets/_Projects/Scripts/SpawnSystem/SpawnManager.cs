@@ -1,20 +1,18 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
 using Game.Player;
 using Unity.Netcode;
-using Unity.Netcode.Components; 
+using Unity.Netcode.Components;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace _Projects.Spawner
+namespace _Projects.SpawnSystem
 {
     public class SpawnManager : NetworkBehaviour
     {
         public static SpawnManager Instance { get; private set; }
         [SerializeField] private GameObject _playerPrefab;
-        [SerializeField] private List<Transform> _spawnPoints; 
+        [SerializeField] private List<Transform> _spawnPoints;
 
         private List<int> _availableRespawnPoints = new List<int>();
         private List<int> _availableSpawnPoints = new List<int>();

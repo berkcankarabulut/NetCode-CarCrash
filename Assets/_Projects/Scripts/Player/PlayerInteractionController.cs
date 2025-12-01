@@ -1,7 +1,7 @@
 using System;
 using _Project.Collect;
 using _Project.UI.Network;
-using _Projects.Spawner;
+using _Projects.SpawnSystem;
 using Unity.Netcode;
 using UnityEngine;
 
