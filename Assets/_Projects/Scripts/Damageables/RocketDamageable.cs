@@ -1,10 +1,14 @@
+using _Project.UI.Network;
+using _Projects.Scripts.SkillSystem;
 using Game.Player;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace _Projects.Scripts.Damageables
 {
     public class RocketDamageable : NetworkBehaviour, IDamageable
     {
+        [SerializeField] private MysteryBoxSkillSO _skill;
         private PlayerVehicleController vehicleController;
         public override void OnNetworkSpawn()
         {
@@ -30,7 +34,13 @@ namespace _Projects.Scripts.Damageables
         public void Damage(PlayerVehicleController vehicle)
         {
             vehicle.CrashVehicle();
-            DestroyRPC();
+            DestroyRPC(); 
+            KillScreenUI.Instance.SetSmashedUI("Kaju", _skill.SkillData.RespawnTimer);
+        }
+
+        public ulong GetKillerClientID()
+        {
+            return OwnerClientId;
         }
 
         [Rpc(SendTo.ClientsAndHost)]

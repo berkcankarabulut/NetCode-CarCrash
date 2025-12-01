@@ -1,4 +1,5 @@
 using System;
+using _Project.UI.Network;
 using _Projects.Scripts.SkillSystem;
 using Game.Player;
 using Unity.Netcode;
@@ -8,6 +9,7 @@ namespace _Projects.Scripts.Damageables
 {
     public class FakeBoxDamageable : NetworkBehaviour, IDamageable
     {
+        [SerializeField] private MysteryBoxSkillSO _skill;
         private PlayerVehicleController vehicleController;
         public override void OnNetworkSpawn()
         {
@@ -22,6 +24,7 @@ namespace _Projects.Scripts.Damageables
 
         public override void OnNetworkDespawn()
         {
+            if(vehicleController == null) return;
             vehicleController.OnVehicleCrashed -= VehicleCrash;
         }
 
@@ -33,6 +36,7 @@ namespace _Projects.Scripts.Damageables
         public void Damage(PlayerVehicleController vehicle)
         {
             vehicle.CrashVehicle();
+            KillScreenUI.Instance.SetSmashedUI("Kaju", _skill.SkillData.RespawnTimer);
             DestroyRPC();
         }
 
@@ -42,6 +46,11 @@ namespace _Projects.Scripts.Damageables
             {
                 DestroyRPC();
             }
+        }
+
+        public ulong GetKillerClientID()
+        {
+            return OwnerClientId;
         }
 
         [Rpc(SendTo.ClientsAndHost)]

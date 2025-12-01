@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  _skill: {fileID: 11400000, guid: df443199edc55d64b958e19b5bd3fb71, type: 2}
 --- !u!1 &5533575078771763277
 GameObject:
   m_ObjectHideFlags: 0
