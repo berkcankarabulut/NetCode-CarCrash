@@ -34,7 +34,7 @@ namespace Game.Player
         {
             Spawn();
         }
-
+ 
         private void OnEnable()
         {
             _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;

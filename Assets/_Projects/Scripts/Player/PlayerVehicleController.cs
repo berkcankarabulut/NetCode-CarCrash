@@ -68,6 +68,7 @@ namespace Game.Player
             if (!IsOwner) return; 
             SetSteerInput(Input.GetAxis("Horizontal"));
             SetAccelerateInput(Input.GetAxis("Vertical"));
+            if(Input.GetKeyDown(KeyCode.T)) CrashVehicle();
         }
 
         private void FixedUpdate()
@@ -86,6 +87,7 @@ namespace Game.Player
             await UniTask.DelayFrame(1);
             _vehicleRigidbody.isKinematic = false;
         }
+ 
 
         private void SetSteerInput(float steerInput)
         {

@@ -11,16 +11,20 @@ namespace _Project.Collect
         private static readonly int IsCollected = Animator.StringToHash("IsCollected");
         private static readonly int IsRespawned = Animator.StringToHash("IsRespawned");
 
-        [Header("Settings")] 
-        [SerializeField] private MysteryBoxSkillSO[] _skills;
+        [Header("Settings")] [SerializeField] private MysteryBoxSkillSO[] _skills;
         [SerializeField] private Animator _animator;
         [SerializeField] private Collider _collider;
         [SerializeField] private float _respawnTime = 5;
 
         public void Collect(PlayerSkillController controller)
         {
+            if(controller.HasSkillAlready) return;
             MysteryBoxSkillSO skill = GetRandomSkill();
-            SkillsUI.Instance.SetSkill(skill.SkillName, skill.Icon);
+            SkillsUI.Instance.SetSkill(skill.SkillName
+                , skill.Icon
+                , skill.SkillUsageType,
+                skill.SkillData.SpawnAmountOrTimer);
+            
             controller.SetupSkill(skill);
             CollectRpc();
         }

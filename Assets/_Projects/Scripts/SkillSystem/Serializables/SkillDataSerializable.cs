@@ -15,6 +15,10 @@ namespace _Projects.Scripts.SkillSystem.Serializables
         public SkillTypes SkillType => _skillType;
         public NetworkObject NetworkObject => _networkObject;
 
+        public void SetPosition(Vector3 position)
+        {
+            _position = position;
+        }
         public SkillDataSerializable(Vector3 position, Quaternion rotation, SkillTypes skillType,
             NetworkObject networkObject)
         {

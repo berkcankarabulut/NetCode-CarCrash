@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using _Projects.Scripts.SkillSystem;
 using _Projects.Scripts.SkillSystem.Serializables;
+using Cysharp.Threading.Tasks;
+using Game.Player; 
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,7 +12,11 @@ namespace _Project.SkillSystem
     public class SkillManager : NetworkBehaviour
     {
         public static SkillManager Instance { get; private set; }
+
+        public Action OnMineCountReduced;
         [SerializeField] private MysteryBoxSkillSO[] _skills;
+        [SerializeField] private LayerMask _groundLayer;
+
         private Dictionary<SkillTypes, MysteryBoxSkillSO> _skillDictionary;
 
         private void Awake()
@@ -42,24 +49,35 @@ namespace _Project.SkillSystem
             SpawnSkill(skill, spawnerClientId);
         }
 
-        private void SpawnSkill(SkillDataSerializable skill, ulong spawnerClientId)
+        private async void SpawnSkill(SkillDataSerializable skillDataSerializable, ulong spawnerClientId)
         {
-            if (!_skillDictionary.TryGetValue(skill.SkillType, out MysteryBoxSkillSO skillData))
+            if (!_skillDictionary.TryGetValue(skillDataSerializable.SkillType, out MysteryBoxSkillSO skillData))
             {
-                Debug.LogError($"Spawn Skill: {skill.SkillType} not found");
+                Debug.LogError($"Spawn Skill: {skillDataSerializable.SkillType} not found");
                 return;
             }
 
-            if (skill.SkillType == SkillTypes.Mine)
+            if (skillDataSerializable.SkillType == SkillTypes.Mine)
             {
+                Vector3 spawnPosition = skillDataSerializable.Position;
+                Vector3 spawnDirection = skillDataSerializable.Rotation * Vector3.forward;
+
+                for (int i = 0; i < skillData.SkillData.SpawnAmountOrTimer; i++)
+                {
+                    Vector3 offset = spawnDirection * (i * 3f);
+                    skillDataSerializable.SetPosition(spawnPosition + offset);
+                    Spawn(skillDataSerializable, spawnerClientId, skillData);
+                    await UniTask.Delay(200);
+                    OnMineCountReduced?.Invoke();
+                }
             }
             else
             {
-                Spawn(skill, spawnerClientId, skillData);
+                Spawn(skillDataSerializable, spawnerClientId, skillData);
             }
         }
 
-        public void Spawn(SkillDataSerializable skillDataSerializable, ulong spawnerClientId, 
+        public void Spawn(SkillDataSerializable skillDataSerializable, ulong spawnerClientId,
             MysteryBoxSkillSO skillData)
         {
             if (!IsServer) return;
@@ -76,6 +94,10 @@ namespace _Project.SkillSystem
                 }
                 else
                 {
+                    PlayerSkillController playerSkillController =
+                        client.PlayerObject.GetComponent<PlayerSkillController>();
+                    networkObject.transform.localPosition = playerSkillController.GetRocketLauncherPosition();
+                    return;
                 }
 
                 if (skillData.SkillData.ShouldBeAttachedToParent)
@@ -91,16 +113,38 @@ namespace _Project.SkillSystem
                 {
                     networkObject.TryRemoveParent();
                 }
+
+                if (skillData.SkillType == SkillTypes.FakeBox)
+                {
+                    float ground = GetGroundHeight(skillData, skillInstance.transform.position);
+                    positionDataSerializable = new PositionDataSerializable(
+                        new Vector3(skillInstance.transform.position.x, ground, skillInstance.transform.position.z));
+                    UpdateSkillPositionRPC(networkObject.NetworkObjectId, positionDataSerializable, true);
+                }
             }
         }
 
         [Rpc(SendTo.ClientsAndHost)]
-        private void UpdateSkillPositionRPC(ulong objectId, PositionDataSerializable positionDataSerializable)
+        private void UpdateSkillPositionRPC(ulong objectId, PositionDataSerializable positionDataSerializable,
+            bool isSpecialPosition = false)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var spawnedObject))
-            {
+            if (!NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(objectId, out var spawnedObject))
+                return;
+            if (isSpecialPosition)
+                spawnedObject.transform.position = positionDataSerializable.Position;
+            else
                 spawnedObject.transform.localPosition = positionDataSerializable.Position;
+        }
+
+        private float GetGroundHeight(MysteryBoxSkillSO skill, Vector3 position)
+        {
+            if (Physics.Raycast(new Vector3(position.x, position.y, position.z), Vector3.down,
+                    out RaycastHit raycastHit, 10f, _groundLayer))
+            {
+                return skill.SkillData.SkillOffset.y;
             }
+
+            return skill.SkillData.SkillOffset.y;
         }
     }
 }
