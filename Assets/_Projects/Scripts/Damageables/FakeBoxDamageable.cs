@@ -11,6 +11,9 @@ namespace _Projects.Scripts.Damageables
     {
         [SerializeField] private MysteryBoxSkillSO _skill;
         private PlayerVehicleController vehicleController;
+
+        public int GetRespawnTimer => _skill.SkillData.RespawnTimer;
+
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
@@ -24,7 +27,7 @@ namespace _Projects.Scripts.Damageables
 
         public override void OnNetworkDespawn()
         {
-            if(vehicleController == null) return;
+            if (vehicleController == null) return;
             vehicleController.OnVehicleCrashed -= VehicleCrash;
         }
 

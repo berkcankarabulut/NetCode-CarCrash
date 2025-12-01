@@ -49,9 +49,10 @@ namespace Game.Player
         private void OnVehicleCrashed()
         {
             enabled = false;
-            SkillsUI.Instance.SetSkillToNull();
-            _hasSkillAlready = true;
+            _skill = null;
+            _hasSkillAlready = false;
             _isSkillused = false;
+            SkillsUI.Instance.SetSkillToNull();
             SetRocketLauncherActiveRPC(false);
             _playerVehicleController.OnVehicleCrashed -= OnVehicleCrashed;
         }
@@ -154,5 +155,7 @@ namespace Game.Player
         {
             return _rocketLaunchPoint.position;
         }
+
+        public void OnPlayerRespawn() => enabled = true;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using _Project.Collect;
 using _Project.UI.Network;
+using _Projects.Spawner;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -59,9 +60,16 @@ namespace Game.Player
                 Debug.Log($"Shield Active");
                 return;
             }
+
+            CrashVehicle(damageable);
+        }
+
+        private void CrashVehicle(IDamageable damageable)
+        {
             damageable.Damage(_vehicleController);
             SetKillerUIRPC(damageable.GetKillerClientID(),
                 RpcTarget.Single(damageable.GetKillerClientID(), RpcTargetUse.Temp));
+            SpawnManager.Instance.RespawnPlayer(damageable.GetRespawnTimer, OwnerClientId);
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
@@ -72,7 +80,12 @@ namespace Game.Player
                 KillScreenUI.Instance.SetSmashUI("Berkcan");
             }
         }
-        
+
+        public void OnPlayerRespawn()
+        {
+            enabled = true;
+            _isCrash = false;
+        }
         public void SetShieldActive(bool active) => _isShieldActive = active;
         public void SetSpikeActive(bool active) => _iSpikeActive = active;
     }
