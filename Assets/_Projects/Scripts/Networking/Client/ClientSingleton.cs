@@ -5,21 +5,25 @@ namespace _Project.Networking.Client
 {
     public class ClientSingleton : MonoBehaviour
     {
-        private static ClientSingleton _instance;
-        private ClientGameManager _gameManager;
+        private static ClientSingleton instance;
+
+        public ClientGameManager ClientGameManager { get; private set; }
 
         public static ClientSingleton Instance
         {
             get
             {
-                if (_instance == null) _instance = FindObjectOfType<ClientSingleton>();
-                if (_instance == null)
+                if (instance != null) { return instance; }
+
+                instance = FindAnyObjectByType<ClientSingleton>();
+
+                if (instance == null)
                 {
-                    Debug.LogError("No ClientSingleton found");
+                    Debug.LogError("No ClientSingleton in the scene!");
                     return null;
                 }
 
-                return _instance;
+                return instance;
             }
         }
 
@@ -28,10 +32,15 @@ namespace _Project.Networking.Client
             DontDestroyOnLoad(gameObject);
         }
 
-        public async UniTask CreateClient()
-        { 
-            _gameManager = new ClientGameManager();
-            await _gameManager.InitAsync();
+        public async UniTask<bool> CreateClient()
+        {
+            ClientGameManager = new ClientGameManager();
+            return await ClientGameManager.InitAsync();
+        }
+
+        private void OnDestroy()
+        {
+            ClientGameManager?.Dispose();
         }
     }
 }

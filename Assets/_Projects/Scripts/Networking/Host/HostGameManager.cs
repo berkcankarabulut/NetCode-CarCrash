@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using _Project.Networking.Server;
-using _Projects.Scripts.Helpers;
+using _Projects.Scripts.Helpers.Const;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;

@@ -1,5 +1,6 @@
+ 
 using System;
-using _Projects.Scripts.Helpers;
+using _Projects.Scripts.Helpers.Const;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
