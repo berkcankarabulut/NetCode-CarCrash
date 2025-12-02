@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using _Project.SkillSystem;
 using _Project.UI.SkillSystem;
+using _Projects.GameManagement;
 using _Projects.Scripts.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
@@ -28,7 +29,9 @@ namespace Game.Player
 
         private void Update()
         {
-            if (!IsOwner) return;
+            if (!IsOwner) return; 
+            if(!_hasSkillAlready) return;
+            if (GameManager.Instance.GameState != GameState.Playing) return;
             if (Input.GetKeyDown(KeyCode.Space) && !_isSkillused)
             {
                 ActivateSkill();

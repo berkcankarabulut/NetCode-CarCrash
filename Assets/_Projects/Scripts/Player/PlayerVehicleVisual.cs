@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Projects.GameManagement;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -58,7 +59,8 @@ namespace Game.Player
 
         private void Update()
         {
-            if (!IsOwner) return;
+            if (!IsOwner) return; 
+            if (GameManager.Instance.GameState != GameState.Playing) return;
             UpdateVisualStates();
             RotateWheels();
             SetSuspension();

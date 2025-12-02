@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Projects.GameManagement;
 using Game.Player;
 using Unity.Netcode;
 using Unity.Netcode.Components;
@@ -61,7 +62,8 @@ namespace _Projects.SpawnSystem
 
         private IEnumerator RespawnPlayerCoroutine(int respawnTimer, ulong clientId)
         {
-            yield return new WaitForSeconds(respawnTimer);
+            yield return new WaitForSeconds(respawnTimer); 
+            if (GameManager.Instance.GameState != GameState.Playing) yield break;
             if (_spawnPoints.Count == 0)
             {
                 Debug.LogWarning("No available respawn points.");

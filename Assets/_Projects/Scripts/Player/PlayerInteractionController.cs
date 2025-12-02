@@ -1,6 +1,7 @@
 using System;
 using _Project.Collect;
 using _Project.UI.Network;
+using _Projects.GameManagement;
 using _Projects.SpawnSystem;
 using Unity.Netcode;
 using UnityEngine;
@@ -42,8 +43,9 @@ namespace Game.Player
 
         private void CheckCollision(Collider other)
         {
-            if (!IsOwner || _isCrash) return;
-
+            if (!IsOwner || _isCrash) return; 
+            if (GameManager.Instance.GameState != GameState.Playing) return;
+            
             if (other.gameObject.TryGetComponent(out ICollectible collectible))
             {
                 collectible.Collect(_playerSkillController);

@@ -1,5 +1,5 @@
 using System;
-using _Project.UI.InGamePlay; 
+using _Projects.UI.GameUIManagement;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,12 +7,19 @@ namespace _Projects.GameManagement
 {
     public class GameManager : NetworkBehaviour
     {
+        public static GameManager Instance { get; private set; }
         public Action<GameState> OnGameStateChanged;
         
         [SerializeField] private GameDataSO _gameDataSO;
         [SerializeField] private GameState _gameState;
         private NetworkVariable<int> _gameTimer = new NetworkVariable<int>(0);
 
+        public GameState GameState => _gameState;
+
+        private void Awake()
+        {
+            Instance = this;
+        } 
         public override void OnNetworkSpawn()
         {
             if (IsServer)
@@ -45,7 +52,7 @@ namespace _Projects.GameManagement
         {
             _gameState = gameState;
             OnGameStateChanged?.Invoke(gameState);
-            Debug.Log($"Game state changed to {_gameState}");
+            Debug.Log($"Game state changed to {this.GameState}");
         }
 
         [Rpc(SendTo.ClientsAndHost)]
@@ -56,7 +63,7 @@ namespace _Projects.GameManagement
 
         private void DecreaseTimerText()
         {
-            if (!IsServer || _gameState != GameState.Playing) return;
+            if (!IsServer || GameState != GameState.Playing) return;
             _gameTimer.Value--;
             if (_gameTimer.Value <= 0)
                 CancelInvoke(nameof(DecreaseTimerText));

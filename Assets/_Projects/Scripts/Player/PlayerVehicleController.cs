@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Projects.GameManagement;
 using Cysharp.Threading.Tasks;
 using Game.Player.Data;
 using Unity.Netcode;
@@ -65,15 +66,16 @@ namespace Game.Player
 
         private void Update()
         {
-            if (!IsOwner) return; 
+            if (!IsOwner) return;
+            if (GameManager.Instance.GameState != GameState.Playing) return;
             SetSteerInput(Input.GetAxis("Horizontal"));
-            SetAccelerateInput(Input.GetAxis("Vertical"));
-            if(Input.GetKeyDown(KeyCode.T)) CrashVehicle();
+            SetAccelerateInput(Input.GetAxis("Vertical")); 
         }
 
         private void FixedUpdate()
         {
-            if (!IsOwner) return; 
+            if (!IsOwner) return;  
+            if (GameManager.Instance.GameState == GameState.GameOver) return;
             UpdateSuspension();
             UpdateSteering();
             UpdateAccelerate();
