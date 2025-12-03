@@ -14,7 +14,7 @@ using UnityEngine.SceneManagement;
 
 namespace _Project.Networking.Client
 {
-    public class ClientGameManager : IDisposable
+    public class ClientManager : IDisposable
     {
         private JoinAllocation _joinAllocation;
         private NetworkClient _networkClient;
@@ -49,18 +49,7 @@ namespace _Project.Networking.Client
             }
 
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_joinAllocation, "dtls"));
-
-            UserData userData = new UserData
-            {
-                UserName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Noname"),
-                UserAuthId = AuthenticationService.Instance.PlayerId
-            };
-
-            string payload = JsonUtility.ToJson(userData);
-            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
-
+            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_joinAllocation, "dtls")); 
             NetworkManager.Singleton.StartClient();
         }
 

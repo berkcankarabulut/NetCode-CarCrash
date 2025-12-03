@@ -6,7 +6,7 @@ namespace _Project.Networking.Host
     {
         private static HostSingleton instance;
 
-        public HostGameManager HostGameManager { get; private set; }
+        public HostManager HostManager { get; private set; }
 
         public static HostSingleton Instance
         {
@@ -33,12 +33,12 @@ namespace _Project.Networking.Host
 
         public void CreateHost()
         {
-            HostGameManager = new HostGameManager();
+            HostManager = new HostManager();
         }
 
         private void OnDestroy()
         {
-            HostGameManager?.Dispose();
+            HostManager?.Dispose();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace _Project.Networking
 
                 if (isAuthenticated)
                 {
-                    clientSingletonInstance.ClientGameManager.GoToMainMenu();
+                    clientSingletonInstance.ClientManager.GoToMainMenu();
                 }
             }
         }

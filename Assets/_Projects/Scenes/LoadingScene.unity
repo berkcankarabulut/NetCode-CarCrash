@@ -203,8 +203,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 306829688}
-  - component: {fileID: 306829686}
   - component: {fileID: 306829689}
+  - component: {fileID: 306829686}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -224,7 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ProtocolType: 0
+  m_ProtocolType: 1
   m_UseWebSockets: 0
   m_UseEncryption: 0
   m_MaxPacketQueueSize: 128
@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a0fc698bf21b644480919acab751d93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hostSingletonPrefab: {fileID: 6158507614701947879, guid: 6587429f1b38bc3459c30990a1464818, type: 3}
+  _hostSingletonPrefab: {fileID: 6158507614701947879, guid: 6587429f1b38bc3459c30990a1464818, type: 3}
   _clientSingletonPrefab: {fileID: 911178459936323342, guid: 8cee7eea40140a147be374ba5f4444ca, type: 3}
 --- !u!4 &760046106
 Transform:

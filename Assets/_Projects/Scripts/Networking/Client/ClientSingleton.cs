@@ -7,7 +7,7 @@ namespace _Project.Networking.Client
     {
         private static ClientSingleton instance;
 
-        public ClientGameManager ClientGameManager { get; private set; }
+        public ClientManager ClientManager { get; private set; }
 
         public static ClientSingleton Instance
         {
@@ -34,13 +34,13 @@ namespace _Project.Networking.Client
 
         public async UniTask<bool> CreateClient()
         {
-            ClientGameManager = new ClientGameManager();
-            return await ClientGameManager.InitAsync();
+            ClientManager = new ClientManager();
+            return await ClientManager.InitAsync();
         }
 
         private void OnDestroy()
         {
-            ClientGameManager?.Dispose();
+            ClientManager?.Dispose();
         }
     }
 }

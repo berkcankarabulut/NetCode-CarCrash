@@ -17,7 +17,7 @@ using UnityEngine.SceneManagement;
 
 namespace _Project.Networking.Host
 {
-    public class HostGameManager : IDisposable
+    public class HostManager : IDisposable
     {
         private const int MAX_CONNECTIONS = 4;
 
@@ -97,7 +97,7 @@ namespace _Project.Networking.Host
 
             NetworkManager.Singleton.StartHost();
 
-            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.CHARACTER_SELECT_SCENE, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.GAME_SCENE, LoadSceneMode.Single);
         }
 
         private IEnumerator HeartbeatLobby(float waitTimeSeconds)
