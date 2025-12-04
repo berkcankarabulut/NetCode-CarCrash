@@ -135,7 +135,8 @@ namespace _Projects.Networking
             PlayerDataSerializable playerData = _playerDataNetworkList[playerDataIndex];
             playerData.ColorId = colorId;
             Debug.Log("color:" + colorId);
-            _playerDataNetworkList[playerDataIndex] = playerData;
+            _playerDataNetworkList.RemoveAt(playerDataIndex);
+            _playerDataNetworkList.Insert(playerDataIndex, playerData);
         }
 
         private bool IsColorAvailable(int colorId)
