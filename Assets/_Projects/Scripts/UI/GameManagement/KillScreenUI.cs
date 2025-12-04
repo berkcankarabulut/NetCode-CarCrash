@@ -4,7 +4,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-namespace _Project.UI.Network
+namespace _Project.UI.GameUIManagement
 {
     public class KillScreenUI : MonoBehaviour
     {

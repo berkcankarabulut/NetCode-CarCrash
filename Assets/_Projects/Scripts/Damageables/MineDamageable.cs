@@ -1,4 +1,4 @@
-using _Project.UI.Network;
+using _Project.UI.GameUIManagement;
 using _Projects.Scripts.SkillSystem;
 using Game.Player;
 using Unity.Netcode;
@@ -11,7 +11,8 @@ namespace _Projects.Scripts.Damageables
         [SerializeField] private MysteryBoxSkillSO _skill;
         private PlayerVehicleController vehicleController;
 
-        public int GetRespawnTimer=>_skill.SkillData.RespawnTimer;
+        public int GetRespawnTimer => _skill.SkillData.RespawnTimer;
+
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
@@ -32,7 +33,7 @@ namespace _Projects.Scripts.Damageables
         {
             DestroyRPC();
         }
-        
+
         public void Damage(PlayerVehicleController vehicle)
         {
             vehicle.CrashVehicle();

@@ -1,4 +1,4 @@
-using _Project.UI.SkillSystem;
+using _Project.UI.GameUIManagement;
 using _Projects.Scripts.SkillSystem;
 using Game.Player;
 using Unity.Netcode;

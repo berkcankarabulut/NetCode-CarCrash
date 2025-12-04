@@ -435,6 +435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a31d8369af52434b85245076fcde030, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lobbiesListUI: {fileID: 887325316}
   _hostButton: {fileID: 1741340256}
   _clientButton: {fileID: 1158519420}
   _lobbiesButton: {fileID: 2063844957}
@@ -829,6 +830,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 887325315}
+  - component: {fileID: 887325316}
   m_Layer: 5
   m_Name: LobbiesParent
   m_TagString: Untagged
@@ -856,6 +858,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &887325316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 887325314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28cd5a3e6df54cd1a642c47339ed6664, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lobbyItemParent: {fileID: 2078169543}
+  _lobbyItemPrefab: {fileID: 4987360664192850160, guid: 5cb858470fa3fa34f8d9d1a448581f2f, type: 3}
+  _refreshButton: {fileID: 933587432}
 --- !u!1 &933587430
 GameObject:
   m_ObjectHideFlags: 0

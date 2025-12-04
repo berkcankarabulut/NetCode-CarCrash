@@ -97,7 +97,7 @@ namespace _Project.Networking.Host
 
             NetworkManager.Singleton.StartHost();
 
-            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.GAME_SCENE, LoadSceneMode.Single);
+            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.CHARACTER_SELECTION_SCENE, LoadSceneMode.Single);
         }
 
         private IEnumerator HeartbeatLobby(float waitTimeSeconds)
@@ -116,7 +116,7 @@ namespace _Project.Networking.Host
             return _joinCode;
         }
 
-        public async void ShutDown()
+        private async void ShutDown()
         {
             HostSingleton.Instance.StopCoroutine(nameof(HeartbeatLobby));
 

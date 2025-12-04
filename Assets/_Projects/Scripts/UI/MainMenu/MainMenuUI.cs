@@ -9,6 +9,7 @@ namespace _Project.UI.MainMenu
 {
     public class MainMenuUI : MonoBehaviour
     {
+        [SerializeField] private LobbiesListUI _lobbiesListUI;
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _clientButton;
         [SerializeField] private Button _lobbiesButton;
@@ -52,16 +53,17 @@ namespace _Project.UI.MainMenu
         private void OpenLobbies()
         { 
             _lobbiesTransform.DOAnchorPosX(-650f, _animationDuration).SetEase(Ease.OutBack);
+            _lobbiesListUI.RefreshLobby();
         }
-
-        private void RefreshLobbies()
-        {
-            throw new System.NotImplementedException();
-        }
-
         private void CloseLobbies()
         { 
             _lobbiesTransform.DOAnchorPosX(900, _animationDuration).SetEase(Ease.OutBack);
         }
+
+        private void RefreshLobbies()
+        {
+            _lobbiesListUI.RefreshLobby();
+        }
+
     }
 }

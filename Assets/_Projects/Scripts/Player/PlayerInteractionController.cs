@@ -1,6 +1,5 @@
-using System;
 using _Project.Collect;
-using _Project.UI.Network;
+using _Project.UI.GameUIManagement;
 using _Projects.GameManagement;
 using _Projects.SpawnSystem;
 using Unity.Netcode;
@@ -11,7 +10,7 @@ namespace Game.Player
     public class PlayerInteractionController : NetworkBehaviour
     {
         private PlayerVehicleController _vehicleController;
-        private PlayerSkillController _playerSkillController;  
+        private PlayerSkillController _playerSkillController;
         private bool _isCrash = false;
         private bool _isShieldActive = false;
         private bool _iSpikeActive = false;
@@ -21,7 +20,7 @@ namespace Game.Player
             base.OnNetworkSpawn();
             if (!IsOwner) return;
             _playerSkillController = GetComponent<PlayerSkillController>();
-            _vehicleController = GetComponent<PlayerVehicleController>(); 
+            _vehicleController = GetComponent<PlayerVehicleController>();
             _vehicleController.OnVehicleCrashed += VehicleCrash;
         }
 
@@ -43,9 +42,9 @@ namespace Game.Player
 
         private void CheckCollision(Collider other)
         {
-            if (!IsOwner || _isCrash) return; 
+            if (!IsOwner || _isCrash) return;
             if (GameManager.Instance.GameState != GameState.Playing) return;
-            
+
             if (other.gameObject.TryGetComponent(out ICollectible collectible))
             {
                 collectible.Collect(_playerSkillController);
@@ -77,7 +76,7 @@ namespace Game.Player
         [Rpc(SendTo.SpecifiedInParams)]
         private void SetKillerUIRPC(ulong killerID, RpcParams rpcParams)
         {
-            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerID,out var killerClient))
+            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerID, out var killerClient))
             {
                 KillScreenUI.Instance.SetSmashUI("Berkcan");
             }
@@ -88,6 +87,7 @@ namespace Game.Player
             enabled = true;
             _isCrash = false;
         }
+
         public void SetShieldActive(bool active) => _isShieldActive = active;
         public void SetSpikeActive(bool active) => _iSpikeActive = active;
     }

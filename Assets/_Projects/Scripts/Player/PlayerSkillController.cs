@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using _Project.SkillSystem;
-using _Project.UI.SkillSystem;
+using _Project.UI.GameUIManagement;
 using _Projects.GameManagement;
 using _Projects.Scripts.SkillSystem;
 using Unity.Netcode;

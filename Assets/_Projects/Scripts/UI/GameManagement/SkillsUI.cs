@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.UI.SkillSystem
+namespace _Project.UI.GameUIManagement
 {
     public class SkillsUI : MonoBehaviour
     {

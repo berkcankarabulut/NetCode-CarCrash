@@ -1,7 +1,7 @@
 using System;
 using System.Text;
 using _Project.Networking.Server;
-using _Projects.Scripts.Helpers.Const; 
+using _Projects.Scripts.Helpers.Const;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -49,7 +49,17 @@ namespace _Project.Networking.Client
             }
 
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_joinAllocation, "dtls")); 
+            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_joinAllocation, "dtls"));
+
+            UserData userData = new UserData()
+            {
+                UserName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Noname"),
+                UserAuthId = AuthenticationService.Instance.PlayerId
+            };
+            string payload = JsonUtility.ToJson(userData);
+            byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
+            
             NetworkManager.Singleton.StartClient();
         }
 
