@@ -1,64 +1,71 @@
 using System;
+using System.Collections.Generic;
 using _Projects.Scripts.Serializables;
 using Unity.Netcode;
+using UnityEngine;
 
 namespace _Projects.Networking
 {
     public class MultiplayerManager : NetworkBehaviour
     {
-        public static MultiplayerManager Instance { private set; get; }
-        private NetworkList<PlayerDataSerializable> _playerDataNetworkList = new NetworkList<PlayerDataSerializable>();
+        public static MultiplayerManager Instance { get; private set; }
+
         public event Action OnPlayerDataNetworkListChanged;
+
+        [SerializeField] private List<Color> _playerColorList;
+
+        private NetworkList<PlayerDataSerializable> _playerDataNetworkList = new NetworkList<PlayerDataSerializable>();
 
         private void Awake()
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+           DontDestroyOnLoad(gameObject);
 
-        private void OnEnable()
-        {
             _playerDataNetworkList.OnListChanged += OnListChanged;
-        }
-
-        private void OnDisable()
-        {
-            _playerDataNetworkList.OnListChanged -= OnListChanged;
         }
 
         public override void OnNetworkSpawn()
         {
-            if (!IsServer) return;
-            _playerDataNetworkList.Clear();
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+            if (IsServer)
+            {
+                _playerDataNetworkList.Clear();
+
+                NetworkManager.Singleton.OnClientDisconnectCallback +=
+                    NetworkManager_Server_OnClientDisconnectedCallback;
+                NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Server_OnClientConnectedCallback;
+            }
         }
 
-        private void OnClientConnected(ulong clientId)
+        private void NetworkManager_Server_OnClientDisconnectedCallback(ulong clientId)
         {
-            for (int i = 0; i < _playerDataNetworkList.Count; i++)
+            for (int i = 0; i < _playerDataNetworkList.Count; ++i)
             {
-                if (!_playerDataNetworkList[i].Equals(clientId)) continue;
-                _playerDataNetworkList.RemoveAt(i);
+                PlayerDataSerializable playerData = _playerDataNetworkList[i];
+                if (playerData.ClientId == clientId)
+                {
+                    _playerDataNetworkList.RemoveAt(i);
+                }
+            }
+        }
+
+        private void NetworkManager_Server_OnClientConnectedCallback(ulong clientId)
+        {
+            for (int i = 0; i < _playerDataNetworkList.Count; ++i)
+            {
+                if (_playerDataNetworkList[i].ClientId == clientId)
+                {
+                    _playerDataNetworkList.RemoveAt(i);
+                }
             }
 
             _playerDataNetworkList.Add(new PlayerDataSerializable
             {
-                ClientId = clientId
+                ClientId = clientId,
+                ColorId = GetFirstUnusedColorId()
             });
         }
 
-        private void OnClientDisconnected(ulong clientId)
-        {
-              for (int i = 0; i < _playerDataNetworkList.Count; i++)
-              {
-                  if (!_playerDataNetworkList[i].Equals(clientId)) continue;
-                  _playerDataNetworkList.RemoveAt(i);
-              }
-        }
-        
-
-        private void OnListChanged(NetworkListEvent<PlayerDataSerializable> changeevent)
+        private void OnListChanged(NetworkListEvent<PlayerDataSerializable> changeEvent)
         {
             OnPlayerDataNetworkListChanged?.Invoke();
         }
@@ -68,9 +75,111 @@ namespace _Projects.Networking
             return playerIndex < _playerDataNetworkList.Count;
         }
 
-        public PlayerDataSerializable GetPlayerData(int playerIndex)
+        public PlayerDataSerializable GetPlayerDataFromClientId(ulong clientId)
+        {
+            foreach (PlayerDataSerializable playerData in _playerDataNetworkList)
+            {
+                if (playerData.ClientId == clientId)
+                {
+                    return playerData;
+                }
+            }
+
+            return default;
+        }
+
+        public int GetPlayerDataIndexFromClientId(ulong clientId)
+        {
+            for (int i = 0; i < _playerDataNetworkList.Count; ++i)
+            {
+                if (_playerDataNetworkList[i].ClientId == clientId)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public PlayerDataSerializable GetPlayerData()
+        {
+            return GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+        }
+
+        public PlayerDataSerializable GetPlayerDataFromPlayerIndex(int playerIndex)
         {
             return _playerDataNetworkList[playerIndex];
+        }
+
+        public Color GetPlayerColor(int colorId)
+        {
+            return _playerColorList[colorId];
+        }
+
+        public void ChangePlayerColor(int colorId)
+        {
+            ChangePlayerColorRpc(colorId);
+        }
+
+        [Rpc(SendTo.Server)]
+        private void ChangePlayerColorRpc(int colorId, RpcParams rpcParams = default)
+        {
+            if (!IsColorAvailable(colorId))
+            {
+                Debug.LogError($"Color {colorId} not available");
+                // COLOR NOT AVAILABLE
+                return;
+            }
+
+            int playerDataIndex = GetPlayerDataIndexFromClientId(rpcParams.Receive.SenderClientId);
+            PlayerDataSerializable playerData = _playerDataNetworkList[playerDataIndex];
+            playerData.ColorId = colorId;
+            Debug.Log("color:" + colorId);
+            _playerDataNetworkList[playerDataIndex] = playerData;
+        }
+
+        private bool IsColorAvailable(int colorId)
+        {
+            foreach (PlayerDataSerializable playerData in _playerDataNetworkList)
+            {
+                if (playerData.ColorId == colorId)
+                {
+                    Debug.Log($"Color {colorId} not available");
+                    // ALREADY USING
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private int GetFirstUnusedColorId()
+        {
+            for (int i = 0; i < _playerColorList.Count; ++i)
+            {
+                if (IsColorAvailable(i))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        public void KickPlayer(ulong clientId)
+        {
+            NetworkManager.Singleton.DisconnectClient(clientId);
+            NetworkManager_Server_OnClientDisconnectedCallback(clientId);
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (IsServer)
+            {
+                NetworkManager.Singleton.OnClientDisconnectCallback -=
+                    NetworkManager_Server_OnClientDisconnectedCallback;
+                NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_Server_OnClientConnectedCallback;
+            }
         }
     }
 }

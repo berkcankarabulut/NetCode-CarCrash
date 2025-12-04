@@ -3,17 +3,20 @@ using Unity.Netcode;
 
 namespace _Projects.Scripts.Serializables
 {
-    public struct PlayerDataSerializable : INetworkSerializeByMemcpy, IEquatable<PlayerDataSerializable>,IEquatable<ulong>
+    public struct PlayerDataSerializable : INetworkSerializeByMemcpy, IEquatable<PlayerDataSerializable>
     {
         public ulong ClientId;
+        public int ColorId;
+
+        public PlayerDataSerializable(ulong clientId, int colorId)
+        {
+            ClientId = clientId;
+            ColorId = colorId;
+        }
+
         public bool Equals(PlayerDataSerializable other)
         {
             return ClientId == other.ClientId;
-        }
-
-        public bool Equals(ulong clientId)
-        {
-            return ClientId == clientId;
         }
     }
 }

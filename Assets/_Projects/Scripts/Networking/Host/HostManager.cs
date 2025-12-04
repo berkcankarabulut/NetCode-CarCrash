@@ -23,7 +23,7 @@ namespace _Projects.Networking.Host
 
         public NetworkServer NetworkServer { get; private set; }
 
-        private Allocation _allocation;
+        private Allocation allocation;
         private string _joinCode;
         private string _lobbyId;
 
@@ -31,7 +31,7 @@ namespace _Projects.Networking.Host
         {
             try
             {
-                _allocation = await RelayService.Instance.CreateAllocationAsync(MAX_CONNECTIONS);
+                allocation = await RelayService.Instance.CreateAllocationAsync(MAX_CONNECTIONS);
             }
             catch (Exception exception)
             {
@@ -41,7 +41,7 @@ namespace _Projects.Networking.Host
 
             try
             {
-                _joinCode = await RelayService.Instance.GetJoinCodeAsync(_allocation.AllocationId);
+                _joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
                 Debug.Log(_joinCode);
             }
             catch (Exception exception)
@@ -51,7 +51,7 @@ namespace _Projects.Networking.Host
             }
 
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_allocation, "dtls"));
+            transport.SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, "dtls"));
 
             try
             {
@@ -65,17 +65,24 @@ namespace _Projects.Networking.Host
                             visibility: DataObject.VisibilityOptions.Member,
                             value: _joinCode
                         )
+                    },
+                    {
+                        "GameStarted", new DataObject
+                        (
+                            visibility: DataObject.VisibilityOptions.Public,
+                            value: "false"
+                        )
                     }
                 };
 
-                string playerName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Noname");
+                string playerName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Unknown");
 
-                Lobby lobby = await LobbyService.Instance.CreateLobbyAsync
-                    ($"{playerName}'s Lobby", MAX_CONNECTIONS, createLobbyOptions);
+                Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(
+                    $"{playerName}'s Lobby", MAX_CONNECTIONS, createLobbyOptions);
 
                 _lobbyId = lobby.Id;
 
-                HostSingleton.Instance.StartCoroutine(HeartbeatLobby(15));
+                HostSingleton.Instance.StartCoroutine(HeartbeatLobby(15f));
             }
             catch (LobbyServiceException lobbyServiceException)
             {
@@ -90,28 +97,27 @@ namespace _Projects.Networking.Host
                 UserName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Noname"),
                 UserAuthId = AuthenticationService.Instance.PlayerId
             };
-
             string payload = JsonUtility.ToJson(userData);
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
 
             NetworkManager.Singleton.StartHost();
 
-            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.CHARACTER_SELECTION_SCENE, LoadSceneMode.Single);
+            NetworkServer.OnClientLeft += HandleClientLeft;
+
+            NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.CHARACTER_SELECTION_SCENE,
+                LoadSceneMode.Single);
         }
 
-        public async void RemovePlayerFromLobby(string playerId)
+        private async void HandleClientLeft(string authId)
         {
-            if (string.IsNullOrEmpty(_lobbyId)) return;
-
             try
             {
-                await LobbyService.Instance.RemovePlayerAsync(_lobbyId, playerId);
-                Debug.Log($"Player {playerId} removed from lobby");
+                await LobbyService.Instance.RemovePlayerAsync(_lobbyId, authId);
             }
-            catch (LobbyServiceException e)
+            catch (LobbyServiceException lobbyServiceException)
             {
-                Debug.LogError($"Failed to remove player from lobby: {e}");
+                Debug.Log(lobbyServiceException);
             }
         }
 
@@ -126,12 +132,12 @@ namespace _Projects.Networking.Host
             }
         }
 
-        public string GetJoinCode()
+        public void Dispose()
         {
-            return _joinCode;
+            Shutdown();
         }
 
-        public async void ShutDown()
+        public async void Shutdown()
         {
             HostSingleton.Instance.StopCoroutine(nameof(HeartbeatLobby));
 
@@ -149,12 +155,19 @@ namespace _Projects.Networking.Host
                 _lobbyId = string.Empty;
             }
 
+            NetworkServer.OnClientLeft -= HandleClientLeft;
+
             NetworkServer?.Dispose();
         }
 
-        public void Dispose()
+        public string GetJoinCode()
         {
-            ShutDown();
+            return _joinCode;
+        }
+
+        public string GetLobbyId()
+        {
+            return _lobbyId;
         }
     }
 }

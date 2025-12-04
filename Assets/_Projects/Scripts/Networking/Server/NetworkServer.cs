@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Collections.Generic; 
 using Unity.Netcode;
 using UnityEngine;
 
@@ -8,6 +7,8 @@ namespace _Projects.Networking.Server
 {
     public class NetworkServer : IDisposable
     {
+        public Action<string> OnClientLeft;
+
         private NetworkManager _networkManager;
 
         private Dictionary<ulong, string> _clientIdToAuthDictionary = new Dictionary<ulong, string>();
@@ -18,27 +19,14 @@ namespace _Projects.Networking.Server
             _networkManager = networkManager;
 
             networkManager.ConnectionApprovalCallback += ApprovalCheck;
-            networkManager.OnServerStarted += OnServerReady;
+            networkManager.OnServerStarted += OnNetworkReady;
         }
 
-        private void OnServerReady()
-        {
-            _networkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
-        }
-
-        private void OnClientDisconnectCallback(ulong clientId)
-        {
-            if (_clientIdToAuthDictionary.TryGetValue(clientId, out string authId))
-            {
-                _clientIdToAuthDictionary.Remove(clientId);
-                _authIdToUserDataDictionary.Remove(authId);
-            }
-        }
-
-        private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request,
+        private void ApprovalCheck(
+            NetworkManager.ConnectionApprovalRequest request,
             NetworkManager.ConnectionApprovalResponse response)
         {
-            string payload = Encoding.UTF8.GetString(request.Payload);
+            string payload = System.Text.Encoding.UTF8.GetString(request.Payload);
             UserData userData = JsonUtility.FromJson<UserData>(payload);
 
             _clientIdToAuthDictionary[request.ClientNetworkId] = userData.UserAuthId;
@@ -48,9 +36,24 @@ namespace _Projects.Networking.Server
             response.CreatePlayerObject = true;
         }
 
-        public UserData GetUserDataByClientId(ulong clienId)
+        private void OnNetworkReady()
         {
-            if (_clientIdToAuthDictionary.TryGetValue(clienId, out string authId))
+            _networkManager.OnClientDisconnectCallback += OnClientDisconnect;
+        }
+
+        private void OnClientDisconnect(ulong clientId)
+        {
+            if (_clientIdToAuthDictionary.TryGetValue(clientId, out string authId))
+            {
+                _clientIdToAuthDictionary.Remove(clientId);
+                _authIdToUserDataDictionary.Remove(authId);
+                OnClientLeft?.Invoke(authId);
+            }
+        }
+
+        public UserData GetUserDataByClientId(ulong clientId)
+        {
+            if (_clientIdToAuthDictionary.TryGetValue(clientId, out string authId))
             {
                 if (_authIdToUserDataDictionary.TryGetValue(authId, out UserData userData))
                 {
@@ -71,8 +74,8 @@ namespace _Projects.Networking.Server
             }
 
             _networkManager.ConnectionApprovalCallback -= ApprovalCheck;
-            _networkManager.OnServerStarted -= OnServerReady;
-            _networkManager.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+            _networkManager.OnServerStarted -= OnNetworkReady;
+            _networkManager.OnClientDisconnectCallback -= OnClientDisconnect;
 
             if (_networkManager.IsListening)
             {

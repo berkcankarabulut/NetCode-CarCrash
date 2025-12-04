@@ -5,115 +5,122 @@ using Unity.Netcode;
 namespace _Projects.CharacterSelect
 {
     public class CharacterSelectReady : NetworkBehaviour
+{
+    public static CharacterSelectReady Instance { get; private set; }
+
+    public event Action OnReadyChanged;
+    public event Action OnUnreadyChanged;
+    public event Action OnAllPlayersReady;
+
+    private Dictionary<ulong, bool> _playerReadyDictionary;
+
+    private void Awake()
     {
-        public static CharacterSelectReady Instance { private set; get; }
-        public event Action OnReadyChanged;
-        public event Action OnUnReadyChanged;
-        public event Action OnAllReadyChanged;
+        Instance = this;
+        _playerReadyDictionary = new Dictionary<ulong, bool>();
+    }
 
-        private Dictionary<ulong, bool> _playerReady;
+    public override void OnNetworkSpawn()
+    {
+        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
+    }
 
-        private void Awake()
+    private void OnClientDisconnectCallback(ulong clientId)
+    {
+        if (_playerReadyDictionary.ContainsKey(clientId))
         {
-            Instance = this;
-            _playerReady = new Dictionary<ulong, bool>();
+            _playerReadyDictionary.Remove(clientId);
+            OnUnreadyChanged?.Invoke();
         }
+    }
 
-        public override void OnDestroy()
+    private void OnClientConnectedCallback(ulong connectedClientId)
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            Instance = null;
-        }
-
-        public override void OnNetworkSpawn()
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallBack;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallBack;
-        }
-
-        private void OnClientConnectedCallBack(ulong connectedClientId)
-        {
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            if (IsPlayerReady(clientId))
             {
-                if (!IsPlayerReady(clientId)) continue;
                 SetPlayerReadyToAllRpc(clientId);
             }
         }
+    }
 
-        private void OnClientDisconnectCallBack(ulong clientId)
+    public void SetPlayerReady()
+    {
+        SetPlayerReadyRpc();
+    }
+
+    public void SetPlayerUnready()
+    {
+        SetPlayerUnreadyRpc();
+    }
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerReadyRpc(RpcParams rpcParams = default)
+    {
+        SetPlayerReadyToAllRpc(rpcParams.Receive.SenderClientId);
+
+        _playerReadyDictionary[rpcParams.Receive.SenderClientId] = true;
+
+        bool allClientsReady = true;
+
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
         {
-            if (!_playerReady.ContainsKey(clientId)) return;
-            _playerReady.Remove(clientId);
-            OnUnReadyChanged?.Invoke();
-        }
-
-        [Rpc(SendTo.Server)]
-        private void SetPlayerReadyRpc(RpcParams rpcParams = default)
-        {
-            SetPlayerReadyToAllRpc(rpcParams.Receive.SenderClientId);
-            _playerReady[rpcParams.Receive.SenderClientId] = true;
-            bool allClientsReady = true;
-
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+            if (!_playerReadyDictionary.ContainsKey(clientId) || !_playerReadyDictionary[clientId])
             {
-                if (_playerReady.ContainsKey(clientId) && _playerReady[clientId]) continue;
                 allClientsReady = false;
                 break;
             }
-
-            if (allClientsReady)
-            {
-                OnAllReadyChanged?.Invoke();
-            }
         }
 
-        [Rpc(SendTo.Server)]
-        private void SetPlayerUnReadyRpc(RpcParams rpcParams = default)
+        if (allClientsReady)
         {
-            SetPlayerUnReadyToAllRpc(rpcParams.Receive.SenderClientId);
-            if (_playerReady.ContainsKey(rpcParams.Receive.SenderClientId))
-            {
-                _playerReady[rpcParams.Receive.SenderClientId] = false;
-            }
-        }
-
-        [Rpc(SendTo.ClientsAndHost)]
-        private void SetPlayerReadyToAllRpc(ulong clientId)
-        {
-            _playerReady[clientId] = true;
-            OnReadyChanged?.Invoke();
-        }
-
-        [Rpc(SendTo.ClientsAndHost)]
-        private void SetPlayerUnReadyToAllRpc(ulong clientId)
-        {
-            _playerReady[clientId] = false;
-            OnReadyChanged?.Invoke();
-            OnUnReadyChanged?.Invoke();
-        }
-
-        public bool IsPlayerReady(ulong playerId)
-        {
-            return _playerReady.ContainsKey(playerId) && _playerReady[playerId];
-        }
-
-        public bool AreAllPlayersReady()
-        {
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
-            {
-                if (_playerReady.ContainsKey(clientId) && _playerReady[clientId]) continue;
-                return false;
-            } 
-            return true;
-        }
-
-        public void SetPlayerReady()
-        {
-            SetPlayerReadyRpc();
-        }
-
-        public void SetPlayerUnready()
-        {
-            SetPlayerUnReadyRpc();
+            OnAllPlayersReady?.Invoke();
         }
     }
+
+    [Rpc(SendTo.Server)]
+    private void SetPlayerUnreadyRpc(RpcParams rpcParams = default)
+    {
+        SetPlayerUnreadyToAllRpc(rpcParams.Receive.SenderClientId);
+
+        if (_playerReadyDictionary.ContainsKey(rpcParams.Receive.SenderClientId))
+        {
+            _playerReadyDictionary[rpcParams.Receive.SenderClientId] = false;
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetPlayerReadyToAllRpc(ulong clientId)
+    {
+        _playerReadyDictionary[clientId] = true;
+        OnReadyChanged?.Invoke();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    private void SetPlayerUnreadyToAllRpc(ulong clientId)
+    {
+        _playerReadyDictionary[clientId] = false;
+        OnReadyChanged?.Invoke();
+        OnUnreadyChanged?.Invoke();
+    }
+
+    public bool AreAllPlayersReady()
+    {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            if (!_playerReadyDictionary.ContainsKey(clientId) || !_playerReadyDictionary[clientId])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool IsPlayerReady(ulong clientId)
+    {
+        return _playerReadyDictionary.ContainsKey(clientId) && _playerReadyDictionary[clientId];
+    }
+}
 }

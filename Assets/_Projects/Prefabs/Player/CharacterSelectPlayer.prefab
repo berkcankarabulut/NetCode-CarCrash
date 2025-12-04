@@ -333,15 +333,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalObjectIdHash: 700720654
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 700720654
   DeferredDespawnTick: 0
   Ownership: 8
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
+  SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
+  DontDestroyWithOwner: 1
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
@@ -358,9 +358,46 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _playerName: {fileID: 111272678472000010}
+  _playerIndex: 0
+  _playerNameText: {fileID: 111272678472000010}
   _readyGameObject: {fileID: 2574862517468559010}
+  _characterSelectVisual: {fileID: 4124304923227170527}
   _kickButton: {fileID: 7714405989987109541}
+  PlayerName:
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0016: 0
+        byte0017: 0
+        byte0018: 0
+        byte0019: 0
+        byte0020: 0
+        byte0021: 0
+        byte0022: 0
+        byte0023: 0
+        byte0024: 0
+        byte0025: 0
+        byte0026: 0
+        byte0027: 0
+        byte0028: 0
+        byte0029: 0
 --- !u!1 &7163897276894900668
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,8 +950,34 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: 8964843823768255083, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8689655995637412029, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4124304923227170527}
   m_SourcePrefab: {fileID: 100100000, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
+--- !u!23 &2062559965784411442 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8736145712017686237, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
+  m_PrefabInstance: {fileID: 7323602179314955247}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2104717558553215826 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8689655995637412029, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
+  m_PrefabInstance: {fileID: 7323602179314955247}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4124304923227170527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104717558553215826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ae938069fb54c84af6ad6c60cb541f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _baseMeshRenderer: {fileID: 2062559965784411442}
 --- !u!4 &4310640134335916301 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6805169093926869730, guid: df7a062d1a7328145b57fc9ab5f3ef5e, type: 3}
