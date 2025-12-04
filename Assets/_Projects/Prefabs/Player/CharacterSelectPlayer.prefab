@@ -295,6 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 116053890331606646}
   - component: {fileID: 365150820046632422}
+  - component: {fileID: 7697311903464711941}
   m_Layer: 0
   m_Name: CharacterSelectPlayer
   m_TagString: Untagged
@@ -331,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4069489859
+  GlobalObjectIdHash: 700720654
   InScenePlacedSourceGlobalObjectIdHash: 0
   DeferredDespawnTick: 0
   Ownership: 8
@@ -344,6 +345,22 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &7697311903464711941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6589965829241817963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f4747bc0a1f4a0694449406ab730117, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _playerName: {fileID: 111272678472000010}
+  _readyGameObject: {fileID: 2574862517468559010}
+  _kickButton: {fileID: 7714405989987109541}
 --- !u!1 &7163897276894900668
 GameObject:
   m_ObjectHideFlags: 0

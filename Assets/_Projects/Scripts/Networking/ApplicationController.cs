@@ -1,9 +1,9 @@
-using _Project.Networking.Client;
-using _Project.Networking.Host;
+using _Projects.Networking.Client;
+using _Projects.Networking.Host;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Project.Networking
+namespace _Projects.Networking
 {
     public class ApplicationController : MonoBehaviour
     {

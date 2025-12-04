@@ -1,6 +1,6 @@
-using Game.Player;
+using _Projects.Player;
 
-namespace _Project.Collect
+namespace _Projects.Collect
 {
     public interface ICollectible
     {

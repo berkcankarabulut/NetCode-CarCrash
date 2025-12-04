@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Project.Networking.Host
+namespace _Projects.Networking.Host
 {
     public class HostSingleton : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Player.Data
+namespace _Projects.Player.Data
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/VehicleSettingsSO", fileName = "VehicleSettingsSO")]
     public class VehicleSettingsSO : ScriptableObject

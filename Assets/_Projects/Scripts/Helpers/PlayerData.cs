@@ -1,4 +1,4 @@
-namespace _Projects.Scripts.Helpers.Const
+namespace _Projects.Helpers.Const
 {
     public struct PlayerData
     {

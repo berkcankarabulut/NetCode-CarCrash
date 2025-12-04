@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using _Projects.Scripts.SkillSystem;
-using _Projects.Scripts.SkillSystem.Serializables;
+using _Project.Serializables;
+using _Projects.Player;
 using Cysharp.Threading.Tasks;
-using Game.Player; 
+using _Projects.Serializables;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Project.SkillSystem
+namespace _Projects.SkillSystem
 {
     public class SkillManager : NetworkBehaviour
     {

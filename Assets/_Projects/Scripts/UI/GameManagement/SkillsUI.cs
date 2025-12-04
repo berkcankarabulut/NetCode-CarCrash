@@ -1,11 +1,11 @@
 using System;
-using _Projects.Scripts.SkillSystem;
+using _Projects.SkillSystem;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.UI.GameUIManagement
+namespace _Projects.Scripts.UI.GameUIManagement
 {
     public class SkillsUI : MonoBehaviour
     {

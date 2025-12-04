@@ -1,11 +1,11 @@
-using _Project.Collect;
-using _Project.UI.GameUIManagement;
+using _Projects.Collect;
+using _Projects.Scripts.UI.GameUIManagement;
 using _Projects.GameManagement;
 using _Projects.SpawnSystem;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Game.Player
+namespace _Projects.Player
 {
     public class PlayerInteractionController : NetworkBehaviour
     {

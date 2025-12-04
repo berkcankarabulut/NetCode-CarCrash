@@ -1,10 +1,10 @@
-using _Project.UI.GameUIManagement;
-using _Projects.Scripts.SkillSystem;
-using Game.Player;
+using _Projects.SkillSystem;
+using _Projects.Scripts.UI.GameUIManagement;
+using _Projects.Player;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Project.Collect
+namespace _Projects.Collect
 {
     public class MysteryBoxCollectible : NetworkBehaviour, ICollectible
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Project.UI.InGamePlay
+namespace _Projects.Scripts.UI.InGamePlay
 {
     public class SettingsUI : MonoBehaviour
     {

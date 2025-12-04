@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Projects.UI.GameUIManagement 
+namespace _Projects.Scripts.UI.GameUIManagement 
 {
     public class LeaderBoardUI : MonoBehaviour
     {

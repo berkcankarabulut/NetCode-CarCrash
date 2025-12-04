@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using _Projects.GameManagement;
+using _Projects.Player.Data;
 using Cysharp.Threading.Tasks;
-using Game.Player.Data;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Game.Player
+namespace _Projects.Player
 {
     public class PlayerVehicleController : NetworkBehaviour
     {

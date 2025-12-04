@@ -3,7 +3,7 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.UI.MainMenu
+namespace _Projects.Scripts.UI.MainMenu
 {
     public class LobbyItem : MonoBehaviour
     {

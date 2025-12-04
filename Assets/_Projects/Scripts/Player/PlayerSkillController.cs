@@ -1,13 +1,12 @@
 using System;
-using System.Collections;
-using _Project.SkillSystem;
-using _Project.UI.GameUIManagement;
+using System.Collections; 
+using _Projects.Scripts.UI.GameUIManagement;
 using _Projects.GameManagement;
-using _Projects.Scripts.SkillSystem;
+using _Projects.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Game.Player
+namespace _Projects.Player
 {
     public class PlayerSkillController : NetworkBehaviour
     {

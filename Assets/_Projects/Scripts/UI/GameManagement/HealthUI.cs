@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Project.UI.GameUIManagement
+namespace _Projects.Scripts.UI.GameUIManagement
 {
     public class HealthUI : MonoBehaviour
     {

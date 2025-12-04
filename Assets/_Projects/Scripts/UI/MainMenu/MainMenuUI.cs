@@ -1,11 +1,11 @@
-using _Project.Networking.Client;
-using _Project.Networking.Host;
+using _Projects.Networking.Client;
+using _Projects.Networking.Host;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.UI.MainMenu
+namespace _Projects.Scripts.UI.MainMenu
 {
     public class MainMenuUI : MonoBehaviour
     {

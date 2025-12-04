@@ -2,15 +2,27 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 
-namespace _Project.CharacterSelect
+namespace _Projects.CharacterSelect
 {
     public class CharacterSelectReady : NetworkBehaviour
     {
+        public static CharacterSelectReady Instance { private set; get; }
         public event Action OnReadyChanged;
         public event Action OnUnReadyChanged;
         public event Action OnAllReadyChanged;
 
-        private Dictionary<ulong, bool> _playerReady = new Dictionary<ulong, bool>();
+        private Dictionary<ulong, bool> _playerReady;
+
+        private void Awake()
+        {
+            Instance = this;
+            _playerReady = new Dictionary<ulong, bool>();
+        }
+
+        public override void OnDestroy()
+        {
+            Instance = null;
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -22,20 +34,16 @@ namespace _Project.CharacterSelect
         {
             foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
-                if (IsPlayerReady(clientId))
-                {
-                    SetPlayerReadyToAllRpc(clientId);
-                }
+                if (!IsPlayerReady(clientId)) continue;
+                SetPlayerReadyToAllRpc(clientId);
             }
         }
 
         private void OnClientDisconnectCallBack(ulong clientId)
         {
-            if (_playerReady.ContainsKey(clientId))
-            {
-                _playerReady.Remove(clientId);
-                OnUnReadyChanged?.Invoke();
-            }
+            if (!_playerReady.ContainsKey(clientId)) return;
+            _playerReady.Remove(clientId);
+            OnUnReadyChanged?.Invoke();
         }
 
         [Rpc(SendTo.Server)]
@@ -88,7 +96,7 @@ namespace _Project.CharacterSelect
             return _playerReady.ContainsKey(playerId) && _playerReady[playerId];
         }
 
-        public bool AreAllPlayersReady(ulong playerId)
+        public bool AreAllPlayersReady()
         {
             foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds)
             {
@@ -103,7 +111,7 @@ namespace _Project.CharacterSelect
             SetPlayerReadyRpc();
         }
 
-        public void SetPlayerUnReady()
+        public void SetPlayerUnready()
         {
             SetPlayerUnReadyRpc();
         }

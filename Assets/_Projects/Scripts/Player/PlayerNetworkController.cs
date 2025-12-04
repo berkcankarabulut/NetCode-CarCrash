@@ -2,7 +2,7 @@ using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Game.Player
+namespace _Projects.Player
 {
     public class PlayerNetworkController : NetworkBehaviour
     {

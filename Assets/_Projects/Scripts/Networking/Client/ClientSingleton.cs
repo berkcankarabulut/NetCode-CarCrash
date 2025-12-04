@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-namespace _Project.Networking.Client
+namespace _Projects.Networking.Client
 {
     public class ClientSingleton : MonoBehaviour
     {

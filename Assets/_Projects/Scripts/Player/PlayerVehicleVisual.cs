@@ -4,7 +4,7 @@ using _Projects.GameManagement;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Game.Player
+namespace _Projects.Player
 {
     public class PlayerVehicleVisual : NetworkBehaviour
     {

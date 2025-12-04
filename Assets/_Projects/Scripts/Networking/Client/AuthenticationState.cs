@@ -1,4 +1,4 @@
-namespace _Project.Networking.Client
+namespace _Projects.Networking.Client
 {
     public enum AuthenticationState
     {

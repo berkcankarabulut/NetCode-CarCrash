@@ -1,11 +1,11 @@
 using System;
-using _Projects.Scripts.Helpers.Const;
+using _Projects.Helpers.Const;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace _Project.UI.NameSelect
+namespace _Projects.Scripts.UI.NameSelect
 {
     public class NameSelectorUI : MonoBehaviour
     {

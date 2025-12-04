@@ -1,4 +1,4 @@
-namespace _Projects.Scripts.SkillSystem
+namespace _Projects.SkillSystem
 {
     public enum SkillUsageType
     {

@@ -1,4 +1,4 @@
-namespace Game.Player
+namespace _Projects.Player
 {
     public enum WheelType
     {

@@ -1,7 +1,9 @@
+ 
+using _Projects.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Projects.Scripts.SkillSystem.Serializables
+namespace _Project.Serializables
 {
     public struct SkillDataSerializable : INetworkSerializeByMemcpy
     {

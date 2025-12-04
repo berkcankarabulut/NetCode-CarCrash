@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Projects.GameManagement;
-using Game.Player;
+using _Projects.Player;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;

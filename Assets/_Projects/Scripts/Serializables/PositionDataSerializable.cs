@@ -2,7 +2,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Projects.Scripts.SkillSystem
+namespace _Projects.Serializables
 {
     public struct PositionDataSerializable : INetworkSerializeByMemcpy
     {

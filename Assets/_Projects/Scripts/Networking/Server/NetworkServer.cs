@@ -4,7 +4,7 @@ using System.Text;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Project.Networking.Server
+namespace _Projects.Networking.Server
 {
     public class NetworkServer : IDisposable
     {

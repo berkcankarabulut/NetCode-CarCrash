@@ -1,10 +1,10 @@
  
 using System;
-using _Projects.Scripts.Helpers.Const;
+using _Projects.Helpers.Const;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
-namespace _Project.Networking.Client
+namespace _Projects.Networking.Client
 {
     public class NetworkClient : IDisposable
     {
@@ -34,7 +34,7 @@ namespace _Project.Networking.Client
             if (_networkManager.IsConnectedClient)
             {
                 _networkManager.Shutdown();
-            }
+            } 
         }
 
         public void Dispose()

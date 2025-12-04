@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using _Project.Networking.Server;
-using _Projects.Scripts.Helpers.Const;
+using _Projects.Networking.Server;
+using _Projects.Helpers.Const;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -15,7 +15,7 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _Project.Networking.Host
+namespace _Projects.Networking.Host
 {
     public class HostManager : IDisposable
     {
@@ -100,6 +100,21 @@ namespace _Project.Networking.Host
             NetworkManager.Singleton.SceneManager.LoadScene(SceneNames.CHARACTER_SELECTION_SCENE, LoadSceneMode.Single);
         }
 
+        public async void RemovePlayerFromLobby(string playerId)
+        {
+            if (string.IsNullOrEmpty(_lobbyId)) return;
+
+            try
+            {
+                await LobbyService.Instance.RemovePlayerAsync(_lobbyId, playerId);
+                Debug.Log($"Player {playerId} removed from lobby");
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.LogError($"Failed to remove player from lobby: {e}");
+            }
+        }
+
         private IEnumerator HeartbeatLobby(float waitTimeSeconds)
         {
             WaitForSecondsRealtime delay = new WaitForSecondsRealtime(waitTimeSeconds);
@@ -116,7 +131,7 @@ namespace _Project.Networking.Host
             return _joinCode;
         }
 
-        private async void ShutDown()
+        public async void ShutDown()
         {
             HostSingleton.Instance.StopCoroutine(nameof(HeartbeatLobby));
 

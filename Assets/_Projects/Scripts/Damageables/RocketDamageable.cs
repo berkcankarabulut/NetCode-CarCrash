@@ -1,10 +1,10 @@
-using _Project.UI.GameUIManagement;
-using _Projects.Scripts.SkillSystem;
-using Game.Player;
+using _Projects.Player;
+using _Projects.Scripts.UI.GameUIManagement;
+using _Projects.SkillSystem;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Projects.Scripts.Damageables
+namespace _Projects.Damageables
 {
     public class RocketDamageable : NetworkBehaviour, IDamageable
     {

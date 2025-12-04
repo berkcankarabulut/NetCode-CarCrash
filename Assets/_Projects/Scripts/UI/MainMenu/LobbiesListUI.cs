@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using _Project.Networking.Client;
+using _Projects.Networking.Client;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Project.UI.MainMenu
+namespace _Projects.Scripts.UI.MainMenu
 {
     public class LobbiesListUI : MonoBehaviour
     {

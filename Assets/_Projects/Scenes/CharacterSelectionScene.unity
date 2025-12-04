@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 51875297}
+  - component: {fileID: 51875298}
   m_Layer: 5
   m_Name: CharacterSelectUI
   m_TagString: Untagged
@@ -160,6 +161,26 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &51875298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51875296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa127adfe20246b79fc48cade671552f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainMenuButton: {fileID: 1496904756}
+  _readyButton: {fileID: 1770946883}
+  _startButton: {fileID: 1777273238}
+  _copyButton: {fileID: 664825782}
+  _readyText: {fileID: 724184390}
+  _readyImage: {fileID: 1770946884}
+  _readySprite: {fileID: -1428609198, guid: 3f382c7e313b8d445aa2a67ad287df26, type: 3}
+  _unReadySprite: {fileID: -1357662861, guid: 435c301b9f8e3f34c9a65f42764b15f9, type: 3}
 --- !u!1 &70934756
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +962,7 @@ GameObject:
   - component: {fileID: 724184391}
   - component: {fileID: 724184390}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ReadyText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1356,6 +1377,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879679886}
   m_CullTransparentMesh: 1
+--- !u!1 &963233850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 963233853}
+  - component: {fileID: 963233851}
+  - component: {fileID: 963233852}
+  m_Layer: 0
+  m_Name: CharacterSelectReady
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &963233851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963233850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 900217644
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &963233852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963233850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d587c21bba3d0a642ae635085b7d0659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+--- !u!4 &963233853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963233850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1068284804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1624,7 +1716,6 @@ GameObject:
   - component: {fileID: 1195797281}
   - component: {fileID: 1195797280}
   - component: {fileID: 1195797279}
-  - component: {fileID: 1195797283}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1717,23 +1808,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1195797283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1195797278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66eef655285dd38449b256f0a6e99efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canvasGroups:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _fadeDuration: 0.5
 --- !u!1 &1203547411
 GameObject:
   m_ObjectHideFlags: 0
@@ -2128,6 +2202,10 @@ PrefabInstance:
     - target: {fileID: 6589965829241817963, guid: bfdb31e00fbd04d48ad84ec34134a3e9, type: 3}
       propertyPath: m_Name
       value: CharacterSelectPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697311903464711941, guid: bfdb31e00fbd04d48ad84ec34134a3e9, type: 3}
+      propertyPath: _playerIndex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3611,6 +3689,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharacterSelectPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 7697311903464711941, guid: bfdb31e00fbd04d48ad84ec34134a3e9, type: 3}
+      propertyPath: _playerIndex
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3715,6 +3797,10 @@ PrefabInstance:
     - target: {fileID: 6589965829241817963, guid: bfdb31e00fbd04d48ad84ec34134a3e9, type: 3}
       propertyPath: m_Name
       value: CharacterSelectPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7697311903464711941, guid: bfdb31e00fbd04d48ad84ec34134a3e9, type: 3}
+      propertyPath: _playerIndex
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3829,6 +3915,7 @@ SceneRoots:
   - {fileID: 1203547412}
   - {fileID: 1195797282}
   - {fileID: 1749535555}
+  - {fileID: 963233853}
   - {fileID: 506852703}
   - {fileID: 1142843352}
   - {fileID: 2047979605}

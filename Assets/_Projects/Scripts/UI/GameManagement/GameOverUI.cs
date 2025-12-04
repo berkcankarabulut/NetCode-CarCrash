@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace _Projects.UI.GameUIManagement
+namespace _Projects.Scripts.UI.GameUIManagement
 {
     public class GameOverUI : MonoBehaviour
     {

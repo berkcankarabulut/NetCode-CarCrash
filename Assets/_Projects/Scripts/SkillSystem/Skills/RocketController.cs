@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Projects.Scripts.SkillSystem
+namespace _Projects.SkillSystem
 {
     public class RocketController : NetworkBehaviour
     {

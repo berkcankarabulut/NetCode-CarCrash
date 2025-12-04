@@ -1,18 +1,18 @@
 using System;
 using System.Text;
-using _Project.Networking.Server;
-using _Projects.Scripts.Helpers.Const;
+using _Projects.Helpers.Const;
+using _Projects.Networking.Server;
 using Cysharp.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
-using Unity.Services.Core;
+using Unity.Services.Core; 
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace _Project.Networking.Client
+namespace _Projects.Networking.Client
 {
     public class ClientManager : IDisposable
     {
@@ -28,7 +28,12 @@ namespace _Project.Networking.Client
 
             AuthenticationState authenticationState = await AuthenticationHandler.DoAuth();
 
-            return authenticationState == AuthenticationState.Authenticated;
+            if (authenticationState == AuthenticationState.Authenticated)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public void GoToMainMenu()
@@ -51,7 +56,7 @@ namespace _Project.Networking.Client
             UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetRelayServerData(AllocationUtils.ToRelayServerData(_joinAllocation, "dtls"));
 
-            UserData userData = new UserData()
+            UserData userData = new UserData
             {
                 UserName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, "Noname"),
                 UserAuthId = AuthenticationService.Instance.PlayerId
@@ -59,7 +64,7 @@ namespace _Project.Networking.Client
             string payload = JsonUtility.ToJson(userData);
             byte[] payloadBytes = Encoding.UTF8.GetBytes(payload);
             NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
-            
+
             NetworkManager.Singleton.StartClient();
         }
 
@@ -75,7 +80,7 @@ namespace _Project.Networking.Client
 
         public void Disconnect()
         {
-            _networkClient.Disconnect();
+            _networkClient.Disconnect(); 
         }
 
         public void Dispose()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _Projects.Scripts.SkillSystem
+namespace _Projects.SkillSystem
 {
     [CreateAssetMenu(menuName = "Scriptable Objects/MysteryBoxSkillSO", fileName = "MysteryBoxSkillSO")]
     public class MysteryBoxSkillSO : ScriptableObject

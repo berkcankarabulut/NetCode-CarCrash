@@ -1,5 +1,5 @@
 using System;
-using _Projects.UI.GameUIManagement;
+using _Projects.Scripts.UI.GameUIManagement;
 using Unity.Netcode;
 using UnityEngine;
 

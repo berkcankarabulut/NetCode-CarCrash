@@ -1,8 +1,8 @@
-using Game.Player;
+using _Projects.Player;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace _Projects.Scripts.SkillSystem
+namespace _Projects.SkillSystem
 {
     public class SpikeSkillController : NetworkBehaviour
     {

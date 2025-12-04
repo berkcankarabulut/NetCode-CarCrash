@@ -3,7 +3,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Core;
 using UnityEngine;
 
-namespace _Project.Networking.Client
+namespace _Projects.Networking.Client
 {
     public static class AuthenticationHandler
     {
