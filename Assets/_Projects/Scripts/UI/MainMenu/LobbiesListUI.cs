@@ -23,6 +23,7 @@ namespace _Projects.Scripts.UI.MainMenu
             {
                 Lobby joinLobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobby.Id);
                 string joinCode = joinLobby.Data["JoinCode"].Value;
+                ClientSingleton.Instance.ClientManager.SetLobbyJoinCode(joinCode);
                 await ClientSingleton.Instance.ClientManager.StartClientAsync(joinCode);
             }
             catch (LobbyServiceException e)

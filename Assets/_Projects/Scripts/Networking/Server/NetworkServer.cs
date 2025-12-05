@@ -30,11 +30,7 @@ namespace _Projects.Networking.Server
             UserData userData = JsonUtility.FromJson<UserData>(payload);
 
             _clientIdToAuthDictionary[request.ClientNetworkId] = userData.UserAuthId;
-            _authIdToUserDataDictionary[userData.UserAuthId] = userData;
-            Debug.Log("_clientIdToAuthDictionary[request.ClientNetworkId] :" +
-                      _clientIdToAuthDictionary[request.ClientNetworkId]);
-            Debug.Log("authIdToUserDataDictionary[userData.UserAuthId] :" +
-                      _authIdToUserDataDictionary[userData.UserAuthId]);
+            _authIdToUserDataDictionary[userData.UserAuthId] = userData; 
             response.Approved = true;
             response.CreatePlayerObject = true;
         }
@@ -59,16 +55,13 @@ namespace _Projects.Networking.Server
             if (_clientIdToAuthDictionary.TryGetValue(clientId, out string authId))
             {
                 if (_authIdToUserDataDictionary.TryGetValue(authId, out UserData userData))
-                {
-                    Debug.Log("Get userData:" + userData);
+                { 
                     return userData;
                 }
-
-                Debug.Log($"Get userData:{authId}");
+ 
                 return null;
             }
-
-            Debug.Log($"Get userData:{authId}");
+ 
             return null;
         }
 
