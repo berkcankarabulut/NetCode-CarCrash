@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Projects.CharacterSelect;
 using _Projects.GameManagement;
+using _Projects.Networking;
+using _Projects.Scripts.Serializables;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -9,6 +13,7 @@ namespace _Projects.Player
     public class PlayerVehicleVisual : NetworkBehaviour
     {
         [SerializeField] private Transform _jeepVisualTransform;
+        [SerializeField] private CharacterSelectVisual _characterSelectVisual;
         [SerializeField] private Collider _playerCollider;
         [SerializeField] private Transform _wheelFrontLeft, _wheelFrontRight, _wheelBackLeft, _wheelBackRight;
         [SerializeField] private float _wheelsSpinSpeed, _wheelYWhenSpringMin, _wheelYWhenSpringMax;
@@ -31,23 +36,23 @@ namespace _Projects.Player
             { WheelType.BackRight, 0.0f }
         };
 
-        private void Awake()
+
+        private void Start()
         {
-            Spawn();
-        }
- 
-        private void OnEnable()
-        {
-            _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
+            PlayerDataSerializable playerDataSerializable =
+                MultiplayerManager.Instance.GetPlayerDataFromClientId(OwnerClientId);
+            _characterSelectVisual.SetPlayerColor(
+                MultiplayerManager.Instance.GetPlayerColor(playerDataSerializable.ColorId));
         }
 
-        private void OnDisable()
-        {
-            _playerVehicleController.OnVehicleCrashed -= PlayerVehicleController_OnVehicleCrashed;
-        }
 
-        private void Spawn()
+        public override void OnNetworkSpawn()
         {
+            if (!IsOwner)
+            {
+                return;
+            }
+
             _playerVehicleController = GetComponent<PlayerVehicleController>();
 
             _wheelFrontLeftRoll = _wheelFrontLeft.localRotation;
@@ -55,11 +60,13 @@ namespace _Projects.Player
 
             _springsRestLength = _playerVehicleController.Settings.SpringRestLength;
             _steerAngle = _playerVehicleController.Settings.SteerAngle;
+
+            _playerVehicleController.OnVehicleCrashed += PlayerVehicleController_OnVehicleCrashed;
         }
 
         private void Update()
         {
-            if (!IsOwner) return; 
+            if (!IsOwner) return;
             if (GameManager.Instance.GameState != GameState.Playing) return;
             UpdateVisualStates();
             RotateWheels();
@@ -177,6 +184,16 @@ namespace _Projects.Player
         public void SetVehicleVisualActive(float delay)
         {
             StartCoroutine(SetVehicleVisualActiveCoroutine(delay));
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            if (!IsOwner)
+            {
+                return;
+            }
+
+            _playerVehicleController.OnVehicleCrashed -= PlayerVehicleController_OnVehicleCrashed;
         }
     }
 }

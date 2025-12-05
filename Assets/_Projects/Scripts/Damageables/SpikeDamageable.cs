@@ -11,7 +11,9 @@ namespace _Projects.Damageables
         [SerializeField] private MysteryBoxSkillSO _skill;
         private PlayerVehicleController vehicleController;
 
-        public int GetRespawnTimer=>_skill.SkillData.RespawnTimer;
+        public int GetRespawnTimer => _skill.SkillData.RespawnTimer;
+
+        public int GetDamageAmount => _skill.SkillData.DamageAmount;
 
         public override void OnNetworkSpawn()
         {

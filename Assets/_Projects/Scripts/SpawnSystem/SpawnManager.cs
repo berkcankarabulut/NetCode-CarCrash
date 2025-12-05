@@ -36,9 +36,18 @@ namespace _Projects.SpawnSystem
                 _availableRespawnPoints.Add(i);
             }
 
-            NetworkManager.OnClientConnectedCallback += SpawnPlayer;
+            SpawnAllPlayers();
         }
 
+        private void SpawnAllPlayers()
+        {
+            if (!IsServer) return;
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                SpawnPlayer(client.ClientId);
+            }
+        }
+        
         private void SpawnPlayer(ulong clientId)
         {
             if (_availableSpawnPoints.Count == 0)

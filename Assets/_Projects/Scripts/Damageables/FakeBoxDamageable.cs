@@ -12,6 +12,7 @@ namespace _Projects.Damageables
         private PlayerVehicleController vehicleController;
 
         public int GetRespawnTimer => _skill.SkillData.RespawnTimer;
+        public int GetDamageAmount  => _skill.SkillData.DamageAmount;
 
         public override void OnNetworkSpawn()
         {

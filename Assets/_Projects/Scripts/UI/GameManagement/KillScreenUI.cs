@@ -10,6 +10,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
     {
         public static KillScreenUI Instance { get; private set; }
         public Action onRespawnTimerCompleted;
+        [Header("Settings")]
         [SerializeField] private float _scaleDuration = 0.5f;
         [SerializeField] private float _smashUIStayDuration = 1f;
         [Header("Smash UI")] [SerializeField] private RectTransform _smashUIRect;

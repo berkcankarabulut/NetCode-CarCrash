@@ -11,6 +11,7 @@ namespace _Projects.Player
     {
         private PlayerVehicleController _vehicleController;
         private PlayerSkillController _playerSkillController;
+        private PlayerHealthController _playerHealthController;
         private bool _isCrash = false;
         private bool _isShieldActive = false;
         private bool _iSpikeActive = false;
@@ -21,6 +22,7 @@ namespace _Projects.Player
             if (!IsOwner) return;
             _playerSkillController = GetComponent<PlayerSkillController>();
             _vehicleController = GetComponent<PlayerVehicleController>();
+            _playerHealthController = GetComponent<PlayerHealthController>();
             _vehicleController.OnVehicleCrashed += VehicleCrash;
         }
 
@@ -68,6 +70,7 @@ namespace _Projects.Player
         private void CrashVehicle(IDamageable damageable)
         {
             damageable.Damage(_vehicleController);
+            _playerHealthController.TakeDamage(damageable.GetDamageAmount);
             SetKillerUIRPC(damageable.GetKillerClientID(),
                 RpcTarget.Single(damageable.GetKillerClientID(), RpcTargetUse.Temp));
             SpawnManager.Instance.RespawnPlayer(damageable.GetRespawnTimer, OwnerClientId);
@@ -86,6 +89,7 @@ namespace _Projects.Player
         {
             enabled = true;
             _isCrash = false;
+            _playerHealthController.RestartHealth();
         }
 
         public void SetShieldActive(bool active) => _isShieldActive = active;
