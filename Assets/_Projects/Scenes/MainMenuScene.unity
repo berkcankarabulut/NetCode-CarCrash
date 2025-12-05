@@ -443,6 +443,7 @@ MonoBehaviour:
   _refreshButton: {fileID: 933587432}
   _lobbiesTransform: {fileID: 109034476}
   _hostInputField: {fileID: 1458779430}
+  _welcomeText: {fileID: 1291328358}
   _animationDuration: 0.2
 --- !u!1 &414803638
 GameObject:

@@ -61,8 +61,6 @@ namespace _Projects.CharacterSelect
 
         private void UpdatePlayer()
         {
-            Debug.Log("UpdatePlayer");
-            Debug.Log("MultiplayerManager.Instance.IsPlayerIndexConnected(_playerIndex):"+MultiplayerManager.Instance.IsPlayerIndexConnected(_playerIndex));
             if (MultiplayerManager.Instance.IsPlayerIndexConnected(_playerIndex))
             {
                 Show();
@@ -74,7 +72,7 @@ namespace _Projects.CharacterSelect
                     MultiplayerManager.Instance.GetPlayerColor(playerData.ColorId));
                 HideKickButtonOnHost(playerData);
                 SetOwner(playerData.ClientId);
-                //UpdatePlayerNameRpc();
+                UpdatePlayerNameRpc();
             }
             else
             {
@@ -105,7 +103,15 @@ namespace _Projects.CharacterSelect
             {
                 UserData userData =
                     HostSingleton.Instance.HostManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
-                    //  PlayerName.Value = userData.UserName;
+
+                if (userData != null)
+                { 
+                    PlayerName.Value = userData.UserName;
+                }
+                else
+                {
+                    Debug.LogWarning($"UserData not found for OwnerClientId: {OwnerClientId}");
+                }
             }
         }
 

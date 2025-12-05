@@ -1,3 +1,4 @@
+using _Projects.Helpers.Const;
 using _Projects.Networking.Client;
 using _Projects.Networking.Host;
 using DG.Tweening;
@@ -17,11 +18,14 @@ namespace _Projects.Scripts.UI.MainMenu
         [SerializeField] private Button _refreshButton;
         [SerializeField] private RectTransform _lobbiesTransform;
         [SerializeField] private TMP_InputField _hostInputField;
+        [SerializeField] private TMP_Text _welcomeText;
 
         [SerializeField] private float _animationDuration = 0.5f;
 
         private void OnEnable()
         {
+            var playerName = PlayerPrefs.GetString(PlayerData.PLAYER_NAME, string.Empty);
+            _welcomeText.text = $"welcome, <color=yellow>{playerName}</color>";
             _hostButton.onClick.AddListener(StartHost);
             _clientButton.onClick.AddListener(StartClient);
             _lobbiesButton.onClick.AddListener(OpenLobbies);
@@ -49,14 +53,14 @@ namespace _Projects.Scripts.UI.MainMenu
             await ClientSingleton.Instance.ClientManager.StartClientAsync(_hostInputField.text);
         }
 
-
         private void OpenLobbies()
-        { 
+        {
             _lobbiesTransform.DOAnchorPosX(-650f, _animationDuration).SetEase(Ease.OutBack);
             _lobbiesListUI.RefreshLobby();
         }
+
         private void CloseLobbies()
-        { 
+        {
             _lobbiesTransform.DOAnchorPosX(900, _animationDuration).SetEase(Ease.OutBack);
         }
 
@@ -64,6 +68,5 @@ namespace _Projects.Scripts.UI.MainMenu
         {
             _lobbiesListUI.RefreshLobby();
         }
-
     }
 }

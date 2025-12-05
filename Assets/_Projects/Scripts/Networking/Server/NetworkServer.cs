@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -31,7 +31,10 @@ namespace _Projects.Networking.Server
 
             _clientIdToAuthDictionary[request.ClientNetworkId] = userData.UserAuthId;
             _authIdToUserDataDictionary[userData.UserAuthId] = userData;
-
+            Debug.Log("_clientIdToAuthDictionary[request.ClientNetworkId] :" +
+                      _clientIdToAuthDictionary[request.ClientNetworkId]);
+            Debug.Log("authIdToUserDataDictionary[userData.UserAuthId] :" +
+                      _authIdToUserDataDictionary[userData.UserAuthId]);
             response.Approved = true;
             response.CreatePlayerObject = true;
         }
@@ -57,12 +60,15 @@ namespace _Projects.Networking.Server
             {
                 if (_authIdToUserDataDictionary.TryGetValue(authId, out UserData userData))
                 {
+                    Debug.Log("Get userData:" + userData);
                     return userData;
                 }
 
+                Debug.Log($"Get userData:{authId}");
                 return null;
             }
 
+            Debug.Log($"Get userData:{authId}");
             return null;
         }
 
