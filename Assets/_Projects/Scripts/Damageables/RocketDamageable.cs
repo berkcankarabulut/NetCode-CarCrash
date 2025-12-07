@@ -13,7 +13,21 @@ namespace _Projects.Damageables
 
         public int GetRespawnTimer => _skill.SkillData.RespawnTimer;
 
-        public int GetDamageAmount  => _skill.SkillData.DamageAmount;
+        public int GetDamageAmount => _skill.SkillData.DamageAmount;
+
+        public string GetKillerName()
+        {
+            ulong killerClientId = GetKillerClientID();
+            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var killerClient))
+            {
+                string playerName = killerClient.PlayerObject.GetComponent<PlayerNetworkController>().PlayerName.Value
+                    .ToString();
+                return playerName;
+            }
+
+            return string.Empty;
+        }
+
         public override void OnNetworkSpawn()
         {
             if (!IsOwner) return;
@@ -35,11 +49,11 @@ namespace _Projects.Damageables
             DestroyRPC();
         }
 
-        public void Damage(PlayerVehicleController vehicle)
+        public void Damage(PlayerVehicleController vehicle, string playerName)
         {
             vehicle.CrashVehicle();
             DestroyRPC();
-            KillScreenUI.Instance.SetSmashedUI("Kaju", _skill.SkillData.RespawnTimer);
+            KillScreenUI.Instance.SetSmashedUI(playerName, _skill.SkillData.RespawnTimer);
         }
 
         public ulong GetKillerClientID()

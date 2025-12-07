@@ -2,6 +2,7 @@ using _Projects.Collect;
 using _Projects.Scripts.UI.GameUIManagement;
 using _Projects.GameManagement;
 using _Projects.SpawnSystem;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace _Projects.Player
         private PlayerVehicleController _vehicleController;
         private PlayerSkillController _playerSkillController;
         private PlayerHealthController _playerHealthController;
+        private PlayerNetworkController _playerNetworkController;
         private bool _isCrash = false;
         private bool _isShieldActive = false;
         private bool _iSpikeActive = false;
@@ -23,6 +25,7 @@ namespace _Projects.Player
             _playerSkillController = GetComponent<PlayerSkillController>();
             _vehicleController = GetComponent<PlayerVehicleController>();
             _playerHealthController = GetComponent<PlayerHealthController>();
+            _playerNetworkController = GetComponent<PlayerNetworkController>();
             _vehicleController.OnVehicleCrashed += VehicleCrash;
         }
 
@@ -69,19 +72,20 @@ namespace _Projects.Player
 
         private void CrashVehicle(IDamageable damageable)
         {
-            damageable.Damage(_vehicleController);
+            var playerName = _playerNetworkController.PlayerName.Value;
+            damageable.Damage(_vehicleController, damageable.GetKillerName());
             _playerHealthController.TakeDamage(damageable.GetDamageAmount);
-            SetKillerUIRPC(damageable.GetKillerClientID(),
+            SetKillerUIRPC(damageable.GetKillerClientID(), playerName.ToString(),
                 RpcTarget.Single(damageable.GetKillerClientID(), RpcTargetUse.Temp));
             SpawnManager.Instance.RespawnPlayer(damageable.GetRespawnTimer, OwnerClientId);
         }
 
         [Rpc(SendTo.SpecifiedInParams)]
-        private void SetKillerUIRPC(ulong killerID, RpcParams rpcParams)
+        private void SetKillerUIRPC(ulong killerID, FixedString32Bytes playerName, RpcParams rpcParams)
         {
             if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerID, out var killerClient))
             {
-                KillScreenUI.Instance.SetSmashUI("Berkcan");
+                KillScreenUI.Instance.SetSmashUI(playerName.ToString());
             }
         }
 

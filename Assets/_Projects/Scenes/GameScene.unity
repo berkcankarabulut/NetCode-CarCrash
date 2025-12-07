@@ -4880,6 +4880,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8756981019109068697, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
+      propertyPath: Ownership
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756981019109068697, guid: 7abedc1e8faff9f4ab1e263bdb40cdec, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 343390485
       objectReference: {fileID: 0}
