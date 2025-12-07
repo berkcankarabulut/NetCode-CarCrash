@@ -86,6 +86,7 @@ namespace _Projects.Player
             if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerID, out var killerClient))
             {
                 KillScreenUI.Instance.SetSmashUI(playerName.ToString());
+                killerClient.PlayerObject.GetComponent<PlayerScoreController>().AddScore(1);
             }
         }
 

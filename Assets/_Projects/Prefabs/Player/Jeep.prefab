@@ -428,6 +428,7 @@ GameObject:
   - component: {fileID: -2075706094278896812}
   - component: {fileID: 7624056860698857111}
   - component: {fileID: 440118145391419150}
+  - component: {fileID: 2517759033227122084}
   m_Layer: 0
   m_Name: Jeep
   m_TagString: Untagged
@@ -667,6 +668,10 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _playerCamera: {fileID: 1505733742790004339}
   _playerName: {fileID: 4045300786191863346}
+  _playerVehicleController: {fileID: 6165962048310713099}
+  _playerSkillController: {fileID: 7624056860698857111}
+  _playerInteractionController: {fileID: -2075706094278896812}
+  _playerScoreController: {fileID: 2517759033227122084}
   PlayerName:
     m_InternalValue:
       utf8LengthInBytes: 0
@@ -746,6 +751,21 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _health: 100
   _maxHealth: 100
+--- !u!114 &2517759033227122084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8751020906983114833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d2c4043898042a2bf779c8436fd6031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  PlayerScore:
+    m_InternalValue: 0
 --- !u!1001 &128928877937068670
 PrefabInstance:
   m_ObjectHideFlags: 0
