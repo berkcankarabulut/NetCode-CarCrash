@@ -56,7 +56,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
                 PlayerNetworkController.OnPlayerDespawned += HandlePlayerDespawned;
             }
         }
- 
+
         private void HandleLeaderboardEntitiesChanged(NetworkListEvent<LeaderBoardEntitesSerializabes> changeEvent)
         {
             switch (changeEvent.Type)
@@ -91,9 +91,11 @@ namespace _Projects.Scripts.UI.GameUIManagement
 
                     break;
                 case NetworkListEvent<LeaderBoardEntitesSerializabes>.EventType.Value:
+
+                    Debug.Log(changeEvent.Value.ClientId + " | " + changeEvent.Value.PlayerName);
                     LeaderBoardRanking LeaderBoardRankingToUpdate
                         = _LeaderBoardRankingList.FirstOrDefault(x => x.ClientId == changeEvent.Value.ClientId);
-
+                    Debug.Log("LeaderBoardRankingToUpdate:" + LeaderBoardRankingToUpdate);
                     if (LeaderBoardRankingToUpdate != null)
                     {
                         LeaderBoardRankingToUpdate.UpdateScore(changeEvent.Value.Score);
@@ -176,6 +178,8 @@ namespace _Projects.Scripts.UI.GameUIManagement
                     _leaderboardEntityList[i].PlayerName.Value,
                     newScore
                 );
+
+                _leaderboardEntityList[i] = leaderBoardEntitesSerializabes;
 
                 UpdatePlayerRankText();
 

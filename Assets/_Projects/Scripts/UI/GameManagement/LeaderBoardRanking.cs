@@ -13,9 +13,9 @@ namespace _Projects.Scripts.UI.GameUIManagement
         [SerializeField] private Color _ownerColor;
 
         public ulong ClientId { get; private set; }
-        private FixedString32Bytes _playerName;
-        public FixedString32Bytes LeaderBoardEntites { get; private set; }
+        private FixedString32Bytes _playerName; 
         public int Score { get; private set; }
+        
         public void SetData(ulong clientId, FixedString32Bytes playerName, int score)
         {
             ClientId = clientId;
@@ -35,6 +35,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
 
         public void UpdateScore(int score)
         {
+            Debug.Log("Updating score:"+score);
             Score = score;
             _scoreText.text = Score.ToString();
         }
