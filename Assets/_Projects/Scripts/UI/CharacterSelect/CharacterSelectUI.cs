@@ -48,8 +48,7 @@ namespace _Projects.Scripts.UI.CharacterSelect
 
         private void Start()
         {
-            _startButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
-            _mainMenuButton.gameObject.SetActive(!NetworkManager.Singleton.IsServer);
+            _startButton.gameObject.SetActive(NetworkManager.Singleton.IsServer); 
             SetStartButtonInteractable(false);
 
             _copiedImage.sprite = _crossSprite;

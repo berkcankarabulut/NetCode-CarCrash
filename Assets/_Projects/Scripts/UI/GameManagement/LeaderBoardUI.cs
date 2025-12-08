@@ -56,7 +56,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
                 PlayerNetworkController.OnPlayerDespawned += HandlePlayerDespawned;
             }
         }
-
+ 
         private void HandleLeaderboardEntitiesChanged(NetworkListEvent<LeaderBoardEntitesSerializabes> changeEvent)
         {
             switch (changeEvent.Type)
@@ -222,7 +222,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
             return leaderboardData;
         }
 
-        /*public string GetWinnersName()
+        public string GetWinnersName()
         {
             if (_LeaderBoardRankingList.Count > 0)
             {
@@ -230,7 +230,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
             }
 
             return "No Winner";
-        }*/
+        }
 
         public override void OnNetworkDespawn()
         {

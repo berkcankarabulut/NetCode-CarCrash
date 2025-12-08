@@ -13,8 +13,10 @@ namespace _Projects.Player
     {
         public static event Action<PlayerNetworkController> OnPlayerSpawned;
         public static event Action<PlayerNetworkController> OnPlayerDespawned;
-        [Header("Components")]
-        [SerializeField] private CinemachineCamera _playerCamera;
+
+        [Header("Components")] [SerializeField]
+        private CinemachineCamera _playerCamera;
+
         [SerializeField] private TMP_Text _playerName;
         [SerializeField] private PlayerVehicleController _playerVehicleController;
         [SerializeField] private PlayerSkillController _playerSkillController;
@@ -26,14 +28,12 @@ namespace _Projects.Player
         public override void OnNetworkSpawn()
         {
             _playerCamera.gameObject.SetActive(IsOwner);
-            if (IsServer)
-            {
-                UserData userData =
-                    HostSingleton.Instance.HostManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
-                PlayerName.Value = userData.UserName;
-                SetPlayerNameRPC();
-                OnPlayerSpawned?.Invoke(this);
-            }
+            if (!IsServer) return;
+            UserData userData =
+                HostSingleton.Instance.HostManager.NetworkServer.GetUserDataByClientId(OwnerClientId);
+            PlayerName.Value = userData.UserName;
+            SetPlayerNameRPC();
+            OnPlayerSpawned?.Invoke(this);
         }
 
         public override void OnNetworkDespawn()

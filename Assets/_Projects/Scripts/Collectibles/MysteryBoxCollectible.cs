@@ -1,3 +1,4 @@
+using _Projects.Helpers.Const;
 using _Projects.SkillSystem;
 using _Projects.Scripts.UI.GameUIManagement;
 using _Projects.Player;
@@ -16,7 +17,7 @@ namespace _Projects.Collect
         [SerializeField] private Collider _collider;
         [SerializeField] private float _respawnTime = 5;
 
-        public void Collect(PlayerSkillController controller)
+        public void Collect(PlayerSkillController controller, CameraShake cameraShake)
         {
             if(controller.HasSkillAlready) return;
             MysteryBoxSkillSO skill = GetRandomSkill();
@@ -27,6 +28,8 @@ namespace _Projects.Collect
             
             controller.SetupSkill(skill);
             CollectRpc();
+            
+            cameraShake.ShakeCamera(.8f, .4f);
         }
 
         [Rpc(SendTo.ClientsAndHost)]

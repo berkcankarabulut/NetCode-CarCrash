@@ -19,7 +19,9 @@ namespace _Projects.GameManagement
         private void Awake()
         {
             Instance = this;
+            ChangeGameStateRPC(GameState.Playing);
         } 
+        
         public override void OnNetworkSpawn()
         {
             if (IsServer)

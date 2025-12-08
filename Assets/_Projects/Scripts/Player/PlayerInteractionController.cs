@@ -1,6 +1,7 @@
 using _Projects.Collect;
 using _Projects.Scripts.UI.GameUIManagement;
 using _Projects.GameManagement;
+using _Projects.Helpers.Const;
 using _Projects.SpawnSystem;
 using Unity.Collections;
 using Unity.Netcode;
@@ -10,6 +11,7 @@ namespace _Projects.Player
 {
     public class PlayerInteractionController : NetworkBehaviour
     {
+        [SerializeField] private CameraShake _cameraShake;
         private PlayerVehicleController _vehicleController;
         private PlayerSkillController _playerSkillController;
         private PlayerHealthController _playerHealthController;
@@ -52,7 +54,7 @@ namespace _Projects.Player
 
             if (other.gameObject.TryGetComponent(out ICollectible collectible))
             {
-                collectible.Collect(_playerSkillController);
+                collectible.Collect(_playerSkillController, _cameraShake);
             }
             else
                 DamageToTarget(other);
@@ -72,20 +74,23 @@ namespace _Projects.Player
 
         private void CrashVehicle(IDamageable damageable)
         {
-            var playerName = _playerNetworkController.PlayerName.Value;
+            var playerName = _playerNetworkController.PlayerName.Value; 
+            _cameraShake.ShakeCamera(3f, .8f);
+            SetKillerUIClientRpc(damageable.GetKillerClientID(), playerName.ToString(),
+                RpcTarget.Single(damageable.GetKillerClientID(), RpcTargetUse.Temp));
             damageable.Damage(_vehicleController, damageable.GetKillerName());
             _playerHealthController.TakeDamage(damageable.GetDamageAmount);
-            SetKillerUIRPC(damageable.GetKillerClientID(), playerName.ToString(),
-                RpcTarget.Single(damageable.GetKillerClientID(), RpcTargetUse.Temp));
             SpawnManager.Instance.RespawnPlayer(damageable.GetRespawnTimer, OwnerClientId);
         }
 
+
         [Rpc(SendTo.SpecifiedInParams)]
-        private void SetKillerUIRPC(ulong killerID, FixedString32Bytes playerName, RpcParams rpcParams)
+        private void SetKillerUIClientRpc(ulong killerClientId, FixedString32Bytes playerName, RpcParams rpcParams)
         {
-            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerID, out var killerClient))
+            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(killerClientId, out var killerClient))
             {
                 KillScreenUI.Instance.SetSmashUI(playerName.ToString());
+                Debug.Log("Hasar aldı");
                 killerClient.PlayerObject.GetComponent<PlayerScoreController>().AddScore(1);
             }
         }
