@@ -36,6 +36,7 @@ namespace _Projects.SpawnSystem
                 _availableRespawnPoints.Add(i);
             }
 
+            Debug.Log("Instance:" + Instance);
             SpawnAllPlayers();
         }
 
@@ -47,12 +48,11 @@ namespace _Projects.SpawnSystem
                 SpawnPlayer(client.ClientId);
             }
         }
-        
+
         private void SpawnPlayer(ulong clientId)
         {
             if (_availableSpawnPoints.Count == 0)
-            {
-                Debug.LogWarning("No available players spawned.");
+            { 
                 return;
             }
 
@@ -71,7 +71,7 @@ namespace _Projects.SpawnSystem
 
         private IEnumerator RespawnPlayerCoroutine(int respawnTimer, ulong clientId)
         {
-            yield return new WaitForSeconds(respawnTimer); 
+            yield return new WaitForSeconds(respawnTimer);
             if (GameManager.Instance.GameState != GameState.Playing) yield break;
             if (_spawnPoints.Count == 0)
             {

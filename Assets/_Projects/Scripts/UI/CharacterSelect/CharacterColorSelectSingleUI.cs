@@ -16,11 +16,8 @@ namespace _Projects.Scripts.UI.CharacterSelect
         {
             _selectButton.onClick.AddListener(() =>
             {
-                if (!CharacterSelectUI.Instance.IsPlayerReady())
-                {
-                    Debug.Log("color:" + _colorId);
-                    MultiplayerManager.Instance.ChangePlayerColor(_colorId);
-                }
+                if (CharacterSelectUI.Instance.IsPlayerReady()) return;
+                MultiplayerManager.Instance.ChangePlayerColor(_colorId);
             });
         }
 
@@ -40,15 +37,7 @@ namespace _Projects.Scripts.UI.CharacterSelect
 
         private void UpdateIsSelected()
         {
-            Debug.Log("UpdateIsSelected:" + _colorId);
-            if (MultiplayerManager.Instance.GetPlayerData().ColorId == _colorId)
-            {
-                _selectedGameObject.SetActive(true);
-            }
-            else
-            {
-                _selectedGameObject.SetActive(false);
-            }
+            _selectedGameObject.SetActive(MultiplayerManager.Instance.GetPlayerData().ColorId == _colorId);
         }
 
         private void OnDestroy()
