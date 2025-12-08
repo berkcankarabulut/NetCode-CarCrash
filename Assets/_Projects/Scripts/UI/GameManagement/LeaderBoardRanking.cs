@@ -34,8 +34,7 @@ namespace _Projects.Scripts.UI.GameUIManagement
         }
 
         public void UpdateScore(int score)
-        {
-            Debug.Log("Updating score:"+score);
+        { 
             Score = score;
             _scoreText.text = Score.ToString();
         }

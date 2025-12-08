@@ -1,68 +1,142 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using _Projects.GameManagement;
+using _Projects.Networking.Client;
+using _Projects.Networking.Host;
 using DG.Tweening;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace _Projects.Scripts.UI.GameUIManagement
 {
     public class GameOverUI : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] private Image _gameOverBackgroundImage;
+    [SerializeField] private RectTransform _gameOverTransform;
+    [SerializeField] private RectTransform _scoreTableTransform;
+    [SerializeField] private TMP_Text _winnerText;
+    [SerializeField] private GameObject _confettiParticles;
+
+    [Header("Buttons")]
+    [SerializeField] private Button _mainMenuButton;
+
+    [Header("Score Table References")]
+    [SerializeField] private Transform _contentTransform;
+    [SerializeField] private ScoreTablePlayer _scoreTablePlayerPrefab;
+    [SerializeField] private LeaderBoardUI _leaderboardUI;
+
+    [Header("Settings")]
+    [SerializeField] private float _animationDuration = 1f;
+    [SerializeField] private float _scaleDuration = 0.5f;
+
+    private RectTransform _mainMenuButtonTransform;
+    private RectTransform _winnerTransform;
+
+    private void Awake()
     {
-        [Header("References")] [SerializeField]
-        private Image _gameOverBackgroundImage;
+        _mainMenuButton.onClick.AddListener(OnMainMenuButtonClicked);
+        
+        _mainMenuButtonTransform = _mainMenuButton.GetComponent<RectTransform>();
+        _winnerTransform = _winnerText.GetComponent<RectTransform>();
+    }
 
-        [SerializeField] private RectTransform _gameOverTransform;
-        [SerializeField] private RectTransform _scoreTableTransform;
-        [SerializeField] private TMP_Text _winnerText;
-        [SerializeField] private Button _mainMenuButton;
-        private RectTransform _mainMenuTransform;
-        private RectTransform _winnerTransform;
-        private float _animationDuration = .6f;
-
-        private void Awake()
+    private void OnMainMenuButtonClicked()
+    {
+        if (NetworkManager.Singleton.IsHost)
         {
-            _mainMenuTransform = _mainMenuButton.GetComponent<RectTransform>();
-            _winnerTransform = _winnerText.GetComponent<RectTransform>();
+            HostSingleton.Instance.HostManager.Shutdown();
         }
 
-        private void Start()
-        {
-            _scoreTableTransform.gameObject.SetActive(false);
-            _scoreTableTransform.localScale = Vector3.zero;
-            GameManager.Instance.OnGameStateChanged += GameStateChanged;
-        }
+        ClientSingleton.Instance.ClientManager.Disconnect();
+    }
 
-        private void GameStateChanged(GameState gameState)
+    private void Start()
+    {
+        _scoreTableTransform.gameObject.SetActive(false);
+        _scoreTableTransform.localScale = Vector3.zero;
+
+        GameManager.Instance.OnGameStateChanged += GameManager_OnGameStateChanged;
+    }
+
+    private void GameManager_OnGameStateChanged(GameState gameState)
+    {
+        if (gameState == GameState.GameOver)
         {
-            if (gameState != GameState.GameOver) return;
             AnimateGameOver();
-            GameManager.Instance.OnGameStateChanged -= GameStateChanged;
-        }
-
-        private void AnimateGameOver()
-        {
-            _gameOverBackgroundImage.DOFade(.8f, _animationDuration / 2);
-            _gameOverTransform.DOAnchorPosY(0f, _animationDuration).SetEase(Ease.OutBounce).OnComplete(() =>
-            {
-                _gameOverTransform.GetComponent<TMP_Text>().DOFade(0f, _animationDuration / 2).SetDelay(.2f).OnComplete(() =>
-                {
-                    AnimateLeaderBoardAndButtons();
-                });;
-            });
-        }
-
-        private void AnimateLeaderBoardAndButtons()
-        {
-          
-            _scoreTableTransform.gameObject.SetActive(true);
-            _scoreTableTransform.DOScale(Vector3.one, 1).SetEase(Ease.OutBack).OnComplete(() =>
-            {
-                _winnerTransform.DOScale(1f, _animationDuration).OnComplete(() =>
-                {
-                    _mainMenuTransform.DOScale(1f, _animationDuration).SetDelay(.2f).SetEase(Ease.OutBack);
-                });
-            });
         }
     }
+
+    private void AnimateGameOver()
+    {
+        _gameOverBackgroundImage.DOFade(.8f, _animationDuration / 2);
+        _gameOverTransform.DOAnchorPosY(0f, _animationDuration).SetEase(Ease.OutBounce).OnComplete(() =>
+        {
+            _gameOverTransform.GetComponent<TMP_Text>().DOFade(0f, _animationDuration / 2).SetDelay(1f).OnComplete(() =>
+            {
+                AnimateLeaderboardAndButtons();
+            });
+        });
+    }
+
+    private void AnimateLeaderboardAndButtons()
+    {
+        _scoreTableTransform.gameObject.SetActive(true);
+        _scoreTableTransform.DOScale(0.8f, _scaleDuration).SetEase(Ease.OutBack).OnComplete(() =>
+        {
+            _mainMenuButtonTransform.DOScale(1f, _scaleDuration).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                _winnerTransform.DOScale(1f, _scaleDuration).SetEase(Ease.OutBack).OnComplete(() =>
+                {
+                    _confettiParticles?.SetActive(true);
+                });
+            });
+        });
+
+        PopulateGameOverLeaderboard();
+    }
+
+    private void PopulateGameOverLeaderboard()
+    {
+        foreach (Transform child in _contentTransform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        var leaderboardData = _leaderboardUI.GetLeaderboardData()
+            .OrderByDescending(x => x.Score)
+            .ToList();
+
+        HashSet<ulong> existingClientIds = new HashSet<ulong>();
+
+        for (int i = 0; i < leaderboardData.Count; i++)
+        {
+            var entry = leaderboardData[i];
+
+            if (existingClientIds.Contains(entry.ClientId))
+            {
+                continue;
+            }
+
+            ScoreTablePlayer scoreTableInstance = Instantiate(_scoreTablePlayerPrefab, _contentTransform);
+            bool isOwner = entry.ClientId == NetworkManager.Singleton.LocalClientId;
+
+            int rank = i + 1;
+            scoreTableInstance.SetScoreTableData(rank.ToString(), entry.PlayerName, entry.Score.ToString(), isOwner);
+
+            existingClientIds.Add(entry.ClientId);
+        }
+
+        SetWinnersName();
+    }
+
+    private void SetWinnersName()
+    {
+        string winnersName = _leaderboardUI.GetWinnersName();
+        _winnerText.text = winnersName + " SMASHED Y'ALL!";
+    }
+}
 }
